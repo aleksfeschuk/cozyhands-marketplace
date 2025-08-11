@@ -1,15 +1,7 @@
-@import './Header.scss';
-
-$papaya-whip: #FFF3D8;
-$jet: #333333;
-$caf-noir: #4F3120;
-$butterscotch: #DD9D4C;
-$licorice: #1A1818;
-$alabaster: #F8F3E9;
-$butterscotch-light: #F5CDA7;
-$amber-alpha: rgba(221, 157, 76, 0.2);
-
+@use "./variables.scss" as *;
+@use "./Header.scss";
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap');
+
 
 body { 
     background-color: $papaya-whip;
@@ -70,3 +62,4 @@ h1, h2, h3 {
     display: flex;
     flex-direction: column;;
 }
+

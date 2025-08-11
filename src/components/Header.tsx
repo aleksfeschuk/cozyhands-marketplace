@@ -15,7 +15,7 @@ const Header: React.FC = () => {
             <div className="container header__container">
                 <Link to="/" className="header__logo">
                     <img
-                        src="/assets/logo-cozyhands.svg"
+                        src="/src/assets/logo-cozyhands.svg"
                         alt="CozyHands Logo"
                         width="120"
                         height="24"
