@@ -18,9 +18,17 @@
 }
 
 .header__logo {
+    width: 150px;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2rem;
     img {
-        width: 120px;
-        height: 24px;
+        width: 100%;
+        height: auto;
+        max-width: 112px;
+        display: block;
     }
 }
 
@@ -72,7 +80,7 @@
 
 
 .header__menu-toggle {
-    display: block;
+    display: none;
     background: none;
     border: none;
     color: $papaya-whip;
@@ -85,6 +93,7 @@
 }
 
 .header__nav-close {
+    display: none;
     position: absolute;
     top: 1rem;
     right: 1rem;
