@@ -2,7 +2,7 @@ import type React from "react";
 import { BrowserRouter as Router, Routes, Route }  from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home";
-
+import Shop from "./components/Shop";
 
 const App: React.FC = () => {
   return (
@@ -11,7 +11,7 @@ const App: React.FC = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/shop" element={<div>Shop Page (to be implemented)</div>} />
+          <Route path="/shop" element={<Shop />} />
           <Route path="/cart" element={<div>Cart Page (to be implemented)</div>} />
           {/* Add more routes as needed */}
         </Routes>
