@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route }  from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
+import ProductDetails from "./components/ProductDetails";
 
 const App: React.FC = () => {
   return (
@@ -12,7 +13,8 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/cart" element={<div>Cart Page (to be implemented)</div>} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/cart" element={<div>Cart (to be implemented)</div>} />
           {/* Add more routes as needed */}
         </Routes>
       </div>
@@ -20,4 +22,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default App;
