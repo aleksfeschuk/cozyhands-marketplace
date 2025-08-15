@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
 import ProductDetails from "./components/ProductDetails";
+import Cart from "./components/Cart";
 
 const App: React.FC = () => {
   return (
@@ -14,7 +15,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/cart" element={<div>Cart (to be implemented)</div>} />
+          <Route path="/cart" element={<Cart />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>
