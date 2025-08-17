@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";;
+import { useState, useEffect } from "react";
 import type { Product } from "../types/index";
+import { useCart } from "../context/CartContext";
 
 const mockProducts: Product[] = [
   {
@@ -33,6 +34,7 @@ const ProductDetails: React.FC = () => {
     // Get the ID parameter from the URL
     const ID = useParams<{ id: string }>().id;
     const [product, setProduct] = useState<Product | null>(null);
+    const { addToCart } = useCart();
 
     // Effect for loading a product when changing the ID
     useEffect(() => {
@@ -43,6 +45,16 @@ const ProductDetails: React.FC = () => {
     if (!product) {
         return <div className="product-details">Product not found</div>
     }
+
+    const handleAddToCart = () => {
+        addToCart({
+            id: product.id,
+            title: product.title, 
+            price: product.price,
+            quantity: 1,
+            imageUrl: product.imageUrl,
+        });
+    };
 
     return (
         <section className ="product-details">
@@ -60,7 +72,9 @@ const ProductDetails: React.FC = () => {
                     <p className="product-details__price">${product.price.toFixed(2)}</p>
                     <p className="product-details__description">{product.description}</p>
 
-                    <button className="product-details__add-btn">Add to Cart</button>
+                    <button 
+                        onClick={handleAddToCart}
+                        className="product-details__add-btn">Add to Cart</button>
                 </div>
             </div>
         </section>
