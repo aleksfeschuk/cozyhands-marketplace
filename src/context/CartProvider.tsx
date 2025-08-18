@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
 import type { CartItem } from "../types/index";
 import  { CartContext } from "./CartContext";
@@ -12,7 +12,14 @@ interface CartProviderProps {
 // This component will manage the cart state and provide functions to manipulate it
 export const CartProvider = ({ children }: CartProviderProps) => {
     
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+        const savedCard = localStorage.getItem("cartItems");
+        return savedCard ? JSON.parse(savedCard) : [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }, [cartItems]) 
 
     const addToCart = (item: CartItem) => {
         setCartItems((prevItems) => {

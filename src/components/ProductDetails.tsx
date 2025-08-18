@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import type { Product } from "../types/index";
 import { useCart } from "../context/CartContext";
+import  Notification  from "./Notification";
 
 const mockProducts: Product[] = [
   {
@@ -37,6 +38,8 @@ const ProductDetails: React.FC = () => {
     const [isEditing, setIsEditing ] = useState(false);
     const [editedProduct, setEditedProduct ] = useState<Product | null>(null)
     const { addToCart } = useCart();
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState("");
 
     // Effect for loading a product when changing the ID
     useEffect(() => {
@@ -69,6 +72,8 @@ const ProductDetails: React.FC = () => {
             mockProducts.length = 0;
             mockProducts.push(...updatedProducts);
             setIsEditing(false);
+            setNotificationMessage("You have successfully edited the product!");
+            setShowNotification(true);
         }
     };
 
@@ -77,17 +82,27 @@ const ProductDetails: React.FC = () => {
         setIsEditing(false);
     }
 
-    if (!product) {
-        return <div className="product-details">Product not found</div>
-    }
+    const handleAddToCart = () => {
+        if (product) {
+            addToCart({
+                id: product.id,
+                title: product.title,
+                price: product.price,
+                quantity: 1,
+                imageUrl: product.imageUrl,
+            });
+            setNotificationMessage("You have successfully added the item to your cart!");
+            setShowNotification(true);
+        }
+    };
 
     return (
         <section className ="product-details">
             <div className = "container product-details__container">
                 <div className="product-details__image">
                     <img 
-                        src={product.imageUrl}
-                        alt={product.title}
+                        src={product?.imageUrl}
+                        alt={product?.title}
                         className="product-details__img"
                     />
                 </div>
@@ -134,21 +149,13 @@ const ProductDetails: React.FC = () => {
                     ) : (
                         <>
                         
-                            <h2 className="product-details__title">{product.title}</h2>
-                            <p className="product-details__category">{product.category}</p>
-                            <p className="product-details__price">${product.price.toFixed(2)}</p>
-                            <p className="product-details__description">{product.description}</p>
+                            <h2 className="product-details__title">{product?.title}</h2>
+                            <p className="product-details__category">{product?.category}</p>
+                            <p className="product-details__price">${product?.price.toFixed(2)}</p>
+                            <p className="product-details__description">{product?.description}</p>
 
                             <button
-                                onClick={() => 
-                                    addToCart ({
-                                        id: product.id,
-                                        title: product.title,
-                                        price: product.price,
-                                        quantity: 1,
-                                        imageUrl: product.imageUrl,
-                                    })
-                                }
+                                onClick={handleAddToCart}
                                 className="product-details__add-btn"
                             >
                                 Add to Card
@@ -163,6 +170,12 @@ const ProductDetails: React.FC = () => {
                     )}
                 </div>
             </div>
+            {showNotification && (
+                <Notification
+                    message={notificationMessage}
+                    onClose={() => setShowNotification(false)}
+                />
+            )}
         </section>
     );
 };

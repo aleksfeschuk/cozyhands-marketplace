@@ -1,23 +1,9 @@
 import { useState, useEffect } from 'react';
 import type { CartItem } from '../types/index';
 import { useCart } from '../context/CartContext';
+import Notification from './Notification';
 
-// const initialCartItems: CartItem[] = [
-//   {
-//     id: "1",
-//     title: "Handwoven Wool Scarf",
-//     price: 29.99,
-//     quantity: 1,
-//     imageUrl: "/assets/scarf.jpg",
-//   },
-//   {
-//     id: "2",
-//     title: "Eco-Friendly Tote Bag",
-//     price: 19.99,
-//     quantity: 2,
-//     imageUrl: "/assets/tote-bag.jpg",
-//   },
-// ];
+
 
 const Cart: React.FC = () => {
     
@@ -25,6 +11,31 @@ const Cart: React.FC = () => {
     
     // Effect for updating the total amount
     const [total, setTotal] = useState(0);
+    const [showApplicationForm, setShowApplicantForm] = useState(false);
+    const [applicantName, setApplicantName] = useState("");
+    const [applicantEmail, setApplicantEmail] = useState("");
+    const [showNotification, setShowNotification] = useState(false);
+    const [notificationMessage, setNotificationMessage] = useState("");
+
+
+    useEffect(() => {
+      const newTotal = cartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+      setTotal(newTotal);
+    }, [cartItems]);
+
+    const handleSubmitOrder = () => {
+      if (applicantName && applicantEmail) {
+        setShowApplicantForm(false);
+        setNotificationMessage("Order placed!");
+        setShowNotification(true);
+      } else {
+        setNotificationMessage("Please fill in all fields!")
+        setShowNotification(true);
+      }
+    }
 
     const renderCartItem = (item: CartItem ) => (
       <div key={item.id} className="cart__item">
@@ -58,13 +69,6 @@ const Cart: React.FC = () => {
       </div>
     )
 
-
-    useEffect(() => {
-      const newTotal = cartItems.reduce(
-        (sum, item) => sum + item.price * item.quantity, 0);
-        setTotal(newTotal);
-      }, [cartItems]);
-
     return (
     <section className="cart">
       <div className="container cart__container">
@@ -80,9 +84,42 @@ const Cart: React.FC = () => {
               <p className="cart__total">
                 Total: <strong>${total.toFixed(2)}</strong>
               </p>
-              <button className="cart__checkout-btn">Proceed to Checkout</button>
+              {showApplicationForm ? (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Your Name"
+                    value={applicantName}
+                    onChange={(e) => setApplicantName(e.target.value)}
+                    className="cart__input"
+                  />
+                  <input 
+                    type="email"
+                    placeholder="Your Email"
+                    value={applicantEmail}
+                    onChange={(e) => setApplicantEmail(e.target.value)}
+                    className="cart__input" 
+                  />
+                  <button
+                    onClick={handleSubmitOrder}
+                    className="cart__submit-btn"
+                  >
+                    Submit Order
+                  </button>
+                </>
+              ) : (
+                <button 
+                  onClick={() => setShowApplicantForm(true)}
+                  className="cart__checkout-btn">Proceed to Checkout</button>
+              )}
             </div>
           </>
+        )}
+        {showNotification && (
+          <Notification
+            message={notificationMessage}
+            onClose={() => setShowNotification(false)}
+          />
         )}
       </div>
     </section>
