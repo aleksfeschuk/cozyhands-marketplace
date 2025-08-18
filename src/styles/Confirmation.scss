@@ -1,0 +1,64 @@
+.confirmation {
+    padding: 2rem 0;
+    background-color: $alabaster;
+};
+
+.confirmation__container {
+    padding: 0 1rem;
+    text-align: center;
+}
+
+.confirmation__title {
+    font-size: 2rem;
+    color: $jet;
+    margin-bottom: 1rem;
+}
+
+.confirmation__message {
+    font-size: 1.5rem; 
+    color: $butterscotch;
+    margin-bottom: 1rem;
+}
+
+.confirmation__details {
+    font-size: 1.2rem;
+    color: $caf-noir;
+    margin-bottom: 1rem;
+}
+
+.confirmation__items {
+    margin: 1rem 0;
+}
+
+.confirmation__item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background-color: white;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
+
+    span {
+        flex: 1;
+        color: $jet;
+    }
+}
+
+.confirmation__total {
+    font-size: 1.5rem;
+    color: $jet;
+    margin-bottom: 1rem;
+}
+
+.confirmation__back-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: $butterscotch;
+    color: #fff;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: lighten($butterscotch, 10%);
+    }
+}

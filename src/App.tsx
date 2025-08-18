@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import Shop from "./components/Shop";
 import ProductDetails from "./components/ProductDetails";
 import Cart from "./components/Cart";
+import Confirmation from "./components/Confirmation";
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/confirmation" element={<Confirmation />} />
           {/* Add more routes as needed */}
         </Routes>
       </div>

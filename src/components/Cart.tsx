@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { CartItem } from '../types/index';
 import { useCart } from '../context/CartContext';
 import Notification from './Notification';
@@ -8,14 +9,13 @@ import Notification from './Notification';
 const Cart: React.FC = () => {
     
     const { cartItems, removeFromCart, updateQuantity } = useCart(); 
-    
-    // Effect for updating the total amount
     const [total, setTotal] = useState(0);
     const [showApplicationForm, setShowApplicantForm] = useState(false);
     const [applicantName, setApplicantName] = useState("");
     const [applicantEmail, setApplicantEmail] = useState("");
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -28,6 +28,15 @@ const Cart: React.FC = () => {
 
     const handleSubmitOrder = () => {
       if (applicantName && applicantEmail) {
+        const orderDetails = {
+          cartItems,
+          applicantName,
+          applicantEmail,
+          total,
+          date: new Date().toISOString(),
+        };
+        localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
+        navigate("/confirmation", { state: orderDetails });
         setShowApplicantForm(false);
         setNotificationMessage("Order placed!");
         setShowNotification(true);
