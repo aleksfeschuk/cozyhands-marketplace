@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
 import type { Product } from "../types/index";
+import '../styles/Shop.scss';
 
 const mockProducts: Product[] = [
   {
@@ -29,32 +31,89 @@ const mockProducts: Product[] = [
 ];
 
 const Shop: React.FC = () => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     return (
         <section className="shop">
             <div className="container shop__container">
                 <h2 className="shop__title">Our Handcrafted Collection</h2>
-                <div className="shop__grid">
-                    {mockProducts.map((product) => (
-                        <div key={product.id} className="shop__product-card">
-                            <div className="shop__product-image">
-                                <img 
-                                    src={product.imageUrl} 
-                                    alt={product.title} 
-                                    className="shop__product-img"/>
-                            </div>
-                            <div className="shop__product-info">
-                                <h3 className="shop__product-title">{product.title}</h3>
-                                <p className="shop__product-category">{product.category}</p>
-                                <p className="shop__product-price">${product.price.toFixed(2)}</p>
-
-                                {/* // Link to individual product page */}
-                                <Link to={`/product/${product.id}`} className="shop__product-link">
-                                    View Details
-                                </Link>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <button
+                    className="shop__menu-toggle"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    {isMenuOpen ? "Close menu" : "Open menu"}
+                </button>
+                <nav className={`shop__nav ${isMenuOpen ? "shop__nav--open" : ""}`}>
+                    <ul className="shop__nav-list">
+                        <li className="shop__nav-item">
+                            <NavLink
+                                to="/shop/all-products"
+                                className={({ isActive }) => 
+                                    `shop__nav-link ${isActive ? "shop__nav-link--active" : ""}`
+                                }
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    All-products
+                            </NavLink>
+                        </li>
+                        <li className="shop__nav-item">
+                            <NavLink
+                                to="/shop/clothing"
+                                className={({ isActive }) => 
+                                    `shop__nav-link ${isActive ? "shop__nav-link-active" : ""}`
+                                }
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Clothing
+                            </NavLink>
+                        </li>
+                        <li className="shop__nav-item">
+                            <NavLink
+                                to="/shop/candles"
+                                className={({ isActive }) => 
+                                    `shop__nav-link ${isActive ? "shop__nav-link-active" : ""}` 
+                                }
+                                    onClick={() => setIsMenuOpen(false)}
+                            >
+                                Candles
+                            </NavLink>
+                        </li>
+                        <li className="shop__nav-item">
+                            <NavLink
+                                to="/shop/accessories"
+                                className={({ isActive }) => 
+                                    `shop__nav-link ${isActive ? "shop__nav-link-active" : ""}`
+                                }
+                                    onClick={() => setIsMenuOpen(false)}
+                            >
+                                Accessories
+                            </NavLink>
+                        </li>
+                        <li className="shop__nav-item">
+                            <NavLink
+                                to="/shop/bags"
+                                className={({ isActive }) => 
+                                    `shop__nav-link ${isActive ? "shop__nav-link-active" : ""}`
+                                } 
+                                    onClick={() => setIsMenuOpen(false)}
+                            >
+                                Bags
+                            </NavLink>
+                        </li>
+                        <li className="shop__nav-item">
+                            <NavLink
+                                to="/shop/sale"
+                                className={({ isActive }) => 
+                                    `shop__nav-link ${isActive ? "shop__nav-link-active" : ""}`
+                                }
+                                    onClick={() => setIsMenuOpen(false)}
+                            >
+                                Sale
+                            </NavLink>
+                        </li>
+                    </ul>
+                </nav>
+                <Outlet />
             </div>
         </section>
     );
