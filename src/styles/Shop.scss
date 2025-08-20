@@ -1,3 +1,8 @@
+@use "./_variables" as *;
+@use "./mixins.scss" as *;
+
+@use "sass:color";
+
 .shop {
     padding: 2rem 0;
     background-color: $alabaster;
@@ -75,12 +80,17 @@
 }
 
 .shop__product-link {
-    @extend .btn-text;
+    @include btn-text;
     display: inline-block;
+    padding: 0.5rem 1rem;
     text-decoration: none;
+    color: $jet;
+    border: 1px solid $butterscotch;
+    border-radius: 0.25rem;
 
     &:hover {
         color: $butterscotch;
+        background-color: color.adjust($alabaster, $lightness: 5%);
     }
 }
 
@@ -88,6 +98,7 @@
 // style for menu
 
 .shop__menu-toggle {
+    @include btn-text;
     display: block;
     padding: 0.5rem 1rem;
     background-color: $butterscotch;
@@ -97,4 +108,46 @@
     cursor: pointer;
     margin-bottom: 1rem;
     
+    &:hover {
+        background-color: color.adjust($butterscotch, $lightness: 10%);
+    }
 }
+
+.shop__nav {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+
+    &.shop__nav--open {
+        max-height: 300px;
+    }
+}
+
+.shop__nav-list {
+    list-style: none;
+    padding: 0;
+}
+
+.shop__nav-item {
+    margin-bottom: 0.5rem;
+}
+
+.shop__nav-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: $jet;
+    text-decoration: none;
+    background-color: $alabaster;
+    border-radius: 0.25rem;
+
+    &:hover {
+        background-color: $butterscotch;
+        color: #fff;
+    }
+
+    &.shop__nav-link--active {
+        background-color: $emerald;
+        color: #fff;
+    }
+}
+

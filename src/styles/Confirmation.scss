@@ -1,3 +1,6 @@
+@use "sass:color";
+@use "./variables" as *;
+
 .confirmation {
     padding: 2rem 0;
     background-color: $alabaster;
@@ -59,6 +62,6 @@
     cursor: pointer;
 
     &:hover {
-        background-color: lighten($butterscotch, 10%);
+        background-color: color.adjust($butterscotch, $lightness: 10%);
     }
 }

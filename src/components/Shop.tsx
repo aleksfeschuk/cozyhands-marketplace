@@ -1,34 +1,8 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import type { Product } from "../types/index";
 import '../styles/Shop.scss';
 
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    title: "Handwoven Wool Scarf",
-    price: 29.99,
-    category: "Accessories",
-    description: "Warm and cozy scarf crafted from natural wool.",
-    imageUrl: "/assets/scarf.jpg",
-  },
-  {
-    id: "2",
-    title: "Eco-Friendly Tote Bag",
-    price: 19.99,
-    category: "Accessories",
-    description: "Stylish tote bag made from recycled cotton.",
-    imageUrl: "/assets/tote-bag.jpg",
-  },
-  {
-    id: "3",
-    title: "Knitted Cotton Sweater",
-    price: 49.99,
-    category: "Clothing",
-    description: "Soft sweater perfect for cool evenings.",
-    imageUrl: "/assets/sweater.jpg",
-  },
-];
+
 
 const Shop: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,7 +27,7 @@ const Shop: React.FC = () => {
                                 }
                                     onClick={() => setIsMenuOpen(false)}
                                 >
-                                    All-products
+                                    All Products
                             </NavLink>
                         </li>
                         <li className="shop__nav-item">

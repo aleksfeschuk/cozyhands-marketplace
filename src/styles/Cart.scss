@@ -1,3 +1,6 @@
+@use "./variables" as *;
+@use "./mixins.scss" as *;
+
 .cart {
     padding: 2rem 0;
     background-color: $alabaster;
@@ -76,7 +79,7 @@
 }
 
 .cart__item-remove {
-    @extend .btn-text;
+    @include btn-text;
     padding: 0.25rem 0.5rem;
     color: $jet;
 
@@ -97,7 +100,7 @@
 
 .cart__checkout-btn,
 .cart__submit-btn {
-    @extend .btn;
+    @include btn-text;
     padding: 0.75rem 1.5rem;
     background-color: #4caf50;
     color: #fff;

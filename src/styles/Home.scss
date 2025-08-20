@@ -1,3 +1,6 @@
+@use "./variables" as *;
+@use "./mixins.scss" as *;
+
 .hero {
     height: calc(100vh - 80px);
     background-color: $alabaster;
@@ -37,7 +40,7 @@
 }
 
 .hero__cta-btn {
-    @extend .btn;
+    @include btn-text;
     display: inline-block;
     text-decoration: none;
     

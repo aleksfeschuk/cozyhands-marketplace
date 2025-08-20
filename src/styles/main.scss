@@ -1,11 +1,13 @@
 @use "./variables.scss" as *;
 @use "./Header.scss";
-@import "./Home.scss";
-@import "./Shop.scss";
-@import './ProductDetails.scss';
-@import "./Cart.scss";
-@import "./Notification.scss";
-@import "./Confirmation.scss";
+@use "./Home.scss";
+@use "./Shop.scss";
+@use './ProductDetails.scss';
+@use "./Cart.scss";
+@use "./Notification.scss";
+@use "./Confirmation.scss";
+@use "./AllProducts.scss";
+@use "./mixins.scss" as *;
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap');
 
 
@@ -42,14 +44,6 @@ h1, h2, h3 {
     &:hover {
         box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
     };
-}
-
-.btn-text {
-    color: $caf-noir;
-    border: 1px solid $butterscotch;
-    &:hover {
-        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
-    }
 }
 
 .img-holder {
