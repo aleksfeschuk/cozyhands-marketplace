@@ -29,6 +29,14 @@ const mockProducts: Product[] = [
     description: "Soft sweater perfect for cool evenings.",
     imageUrl: "/assets/sweater.jpg",
   },
+  {
+    id: "4",
+    title: "Soy Wax Candle",
+    price: 14.99,
+    category: "Candles",
+    description: "Hand-poured soy wax candle with a soothing lavender scent.",
+    imageUrl: "/assets/candle.jpg",
+  },
 ];
 
 const ProductDetails: React.FC = () => {
