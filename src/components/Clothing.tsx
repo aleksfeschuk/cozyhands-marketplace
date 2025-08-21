@@ -1,33 +1,6 @@
 import { Link } from "react-router-dom";
-import type { Product } from "../types/index";
+import { mockProducts } from "../data/products";
 import "../styles/Clothing.scss";
-
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    title: "Handwoven Wool Scarf",
-    price: 29.99,
-    category: "Accessories",
-    description: "Warm and cozy scarf crafted from natural wool.",
-    imageUrl: "/assets/scarf.jpg",
-  },
-  {
-    id: "2",
-    title: "Eco-Friendly Tote Bag",
-    price: 19.99,
-    category: "Accessories",
-    description: "Stylish tote bag made from recycled cotton.",
-    imageUrl: "/assets/tote-bag.jpg",
-  },
-  {
-    id: "3",
-    title: "Knitted Cotton Sweater",
-    price: 49.99,
-    category: "Clothing",
-    description: "Soft sweater perfect for cool evenings.",
-    imageUrl: "/assets/sweater.jpg",
-  },
-];
 
 const Clothing: React.FC = () => {
     // Filter products, leaving only those that belong to the “Clothing” category
