@@ -1,4 +1,5 @@
 @use "./variables.scss" as *;
+@use "./mixins.scss" as *;
 @use "./Header.scss";
 @use "./Home.scss";
 @use "./Shop.scss";
@@ -7,7 +8,7 @@
 @use "./Notification.scss";
 @use "./Confirmation.scss";
 @use "./AllProducts.scss";
-@use "./mixins.scss" as *;
+@use "./Clothing.scss";
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap');
 
 

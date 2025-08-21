@@ -34,7 +34,7 @@ const Shop: React.FC = () => {
                             <NavLink
                                 to="/shop/clothing"
                                 className={({ isActive }) => 
-                                    `shop__nav-link ${isActive ? "shop__nav-link-active" : ""}`
+                                    `shop__nav-link ${isActive ? "shop__nav-link--active" : ""}`
                                 }
                                     onClick={() => setIsMenuOpen(false)}
                                 >
@@ -45,7 +45,7 @@ const Shop: React.FC = () => {
                             <NavLink
                                 to="/shop/candles"
                                 className={({ isActive }) => 
-                                    `shop__nav-link ${isActive ? "shop__nav-link-active" : ""}` 
+                                    `shop__nav-link ${isActive ? "shop__nav-link--active" : ""}` 
                                 }
                                     onClick={() => setIsMenuOpen(false)}
                             >
@@ -56,7 +56,7 @@ const Shop: React.FC = () => {
                             <NavLink
                                 to="/shop/accessories"
                                 className={({ isActive }) => 
-                                    `shop__nav-link ${isActive ? "shop__nav-link-active" : ""}`
+                                    `shop__nav-link ${isActive ? "shop__nav-link--active" : ""}`
                                 }
                                     onClick={() => setIsMenuOpen(false)}
                             >

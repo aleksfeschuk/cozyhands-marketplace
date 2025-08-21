@@ -48,6 +48,7 @@ const AllProducts: React.FC = () => {
                                 <h3 className="all-products__product-title">{product.title}</h3>
                                 <p className="all-products__product-category">{product.category}</p>
                                 <p className="all-products__product-price">${product.price.toFixed(2)}</p>
+                                <p className="all-products__product-description">{product.description}</p>
                                 <Link
                                     to={`/product/${product.id}`}
                                     className="all-products__product-link">

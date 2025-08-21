@@ -1,28 +1,38 @@
 @use "./variables" as *;
 @use "sass:color";
 
-.all-products {
+.clothing {
     padding: 2rem 0;
     background-color: $alabaster;
 }
 
-.all-products__container {
+.clothing__container {
     padding: 0 1rem;
 }
 
-.all-products__title {
+.clothing__title {
     font-size: 2rem;
     font-weight: 600;
     color: $caf-noir;
     text-align: center;
     margin-bottom: 2rem;
+
+    @media(min-width: 768px) {
+        font-size: 2.5rem;
+    }
 }
 
-.all-products__grid {
+.clothing__empty {
+    font-size: 1.2rem;
+    color: $jet;
+    text-align: center;
+}
+
+.clothing__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
-    
+
     @media (min-width: 768px) {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -32,7 +42,7 @@
     }
 }
 
-.all-products__product-card {
+.clothing__product-card {
     background-color: #fff;
     border-radius: 0.5rem;
     overflow: hidden;
@@ -44,42 +54,51 @@
     }
 }
 
-.all-products__product-image {
+.clothing__product-image {
     height: 250px;
     overflow: hidden;
 }
 
-.all-products__product-img {
+.clothing__product-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-
-.all-products__product-info {
+.clothing__product-info {
     padding: 1rem;
 }
 
-.all-products__product-price {
+.clothing__product-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $jet;
+    margin-bottom: 0.5rem;
+}
+
+.clothing__product-price {
     font-size: 1.1rem;
     font-weight: 700;
     color: $butterscotch;
     margin-bottom: 1rem;
 }
 
-.all-products__product-description {
+.clothing__product-description {
     font-size: 0.9rem;
     color: $caf-noir;
     margin-bottom: 1rem;
     line-height: 1.4;
 }
 
-.all-products__product-link {
+.clothing__product-link {
     display: inline-block;
+    padding: 0.5rem 1rem;
     text-decoration: none;
     color: $jet;
+    border-radius: 0.25rem;
 
     &:hover {
         color: $butterscotch;
+        background-color: color.adjust($alabaster, $lightness: 5%);
     }
 }
