@@ -42,4 +42,13 @@ export const mockProducts: Product[] = [
     description: "Elegant bracelet crafted from genuine leather.",
     imageUrl: "/assets/bracelet.jpg",
   },
+
+  {
+    id: "6",
+    title: "Canvas Tote Bag",
+    price: 22.99,
+    category: "Bags",
+    description: "Durable canvas tote bag with stylish design.",
+    imageUrl: "/assets/tote-bag-canvas.jpg",
+  },
 ];
