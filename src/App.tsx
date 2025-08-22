@@ -9,6 +9,7 @@ import Confirmation from "./components/Confirmation";
 import AllProducts from "./components/AllProducts";
 import Clothing from "./components/Clothing";
 import Candles from "./components/Candles";
+import Accessories from "./components/Accessories";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
             <Route path="all-products" element={<AllProducts />}/>
             <Route path="clothing" element={<Clothing />} />
             <Route path="candles" element={<Candles/>}></Route>
+            <Route path="accessories" element={<Accessories/>}></Route>
           </Route>
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
