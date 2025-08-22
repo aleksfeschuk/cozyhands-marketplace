@@ -11,6 +11,7 @@ import Clothing from "./components/Clothing";
 import Candles from "./components/Candles";
 import Accessories from "./components/Accessories";
 import Bags from "./components/Bags";
+import Sale from "./components/Sale";
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             <Route path="candles" element={<Candles/>}></Route>
             <Route path="accessories" element={<Accessories/>}></Route>
             <Route path="bags" element={<Bags/>}></Route>
+            <Route path="sale" element={<Sale/>}></Route>
           </Route>
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
