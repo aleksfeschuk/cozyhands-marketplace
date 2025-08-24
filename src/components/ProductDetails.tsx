@@ -8,7 +8,7 @@ import  Notification  from "./Notification";
 
 const ProductDetails: React.FC = () => {
     // Get the ID parameter from the URL
-    const ID = useParams<{ id: string }>().id;
+    const { id } = useParams<{ id: string }>();
     const [product, setProduct] = useState<Product | null>(null);
     const [isEditing, setIsEditing ] = useState(false);
     const [editedProduct, setEditedProduct ] = useState<Product | null>(null)
@@ -18,10 +18,21 @@ const ProductDetails: React.FC = () => {
 
     // Effect for loading a product when changing the ID
     useEffect(() => {
-        const foundProduct = mockProducts.find((p) => p.id === ID);
+        if (!id) return;
+        const foundProduct = mockProducts.find((p) => p.id === id);
         setProduct(foundProduct || null);
         setEditedProduct(foundProduct || null);
-    }, [ID])
+    }, [id]);
+
+    if (!product) {
+        return (
+            <section className="product-details">
+                <div className="container product-details__container">
+                    <p>Product not found</p>
+                </div>
+            </section>
+        );
+    }
 
     // Processing changes to form fields
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +41,7 @@ const ProductDetails: React.FC = () => {
             setEditedProduct({
                 ...editedProduct,
                 [name]: name === "price" ? parseFloat(value) || 0 : value,
-            });
+            } as Product);
         }
     };
 
@@ -46,6 +57,7 @@ const ProductDetails: React.FC = () => {
             setProduct(editedProduct);
             mockProducts.length = 0;
             mockProducts.push(...updatedProducts);
+
             setIsEditing(false);
             setNotificationMessage("You have successfully edited the product!");
             setShowNotification(true);
@@ -58,17 +70,15 @@ const ProductDetails: React.FC = () => {
     }
 
     const handleAddToCart = () => {
-        if (product) {
-            addToCart({
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                quantity: 1,
-                imageUrl: product.imageUrl,
-            });
-            setNotificationMessage("You have successfully added the item to your cart!");
-            setShowNotification(true);
-        }
+        addToCart({
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            quantity: 1,
+            imageUrl: product.imageUrl,
+        });
+        setNotificationMessage("You have successfully added the item to your cart!");
+        setShowNotification(true);
     };
 
     return (
@@ -76,8 +86,8 @@ const ProductDetails: React.FC = () => {
             <div className = "container product-details__container">
                 <div className="product-details__image">
                     <img 
-                        src={product?.imageUrl}
-                        alt={product?.title}
+                        src={product.imageUrl}
+                        alt={product.title}
                         className="product-details__img"
                     />
                 </div>
@@ -95,7 +105,7 @@ const ProductDetails: React.FC = () => {
                             <input
                                 type="number"
                                 name="price"
-                                value={editedProduct?.price || 0}
+                                value={editedProduct?.price ?? 0}
                                 onChange={handleChange}
                                 className="product-details__edit-input"
                                 step="0.01"
@@ -124,16 +134,16 @@ const ProductDetails: React.FC = () => {
                     ) : (
                         <>
                         
-                            <h2 className="product-details__title">{product?.title}</h2>
-                            <p className="product-details__category">{product?.category}</p>
-                            <p className="product-details__price">${product?.price.toFixed(2)}</p>
-                            <p className="product-details__description">{product?.description}</p>
+                            <h2 className="product-details__title">{product.title}</h2>
+                            <p className="product-details__category">{product.category}</p>
+                            <p className="product-details__price">${product.price.toFixed(2)}</p>
+                            <p className="product-details__description">{product.description}</p>
 
                             <button
                                 onClick={handleAddToCart}
                                 className="product-details__add-btn"
                             >
-                                Add to Card
+                                Add to Cart
                             </button>
                             <button
                                 onClick={() => setIsEditing(true)}

@@ -11,15 +11,14 @@ export interface CartContextType {
 
 
 // Create a context with an initial value of undefined
-export const CartContext = createContext<CartContextType | undefined>(undefined);
+export const CartContext = createContext<CartContextType> ({
+    cartItems: [],
+    addToCart: () => {},
+    removeFromCart: () => {},
+    updateQuantity: () => {},
+});
 
 
 // Custom hook to use the CartContext for used in components
 
-export const useCart = () => {
-    const context = useContext(CartContext);
-    if (!context) {
-        throw new Error ("useCart must be used within a CartProvider");
-    }
-    return context;
-};
+export const useCart = () =>  useContext(CartContext); 

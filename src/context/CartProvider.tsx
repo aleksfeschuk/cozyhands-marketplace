@@ -13,8 +13,12 @@ interface CartProviderProps {
 export const CartProvider = ({ children }: CartProviderProps) => {
     
     const [cartItems, setCartItems] = useState<CartItem[]>(() => {
-        const savedCard = localStorage.getItem("cartItems");
-        return savedCard ? JSON.parse(savedCard) : [];
+        try {
+            const savedCard = localStorage.getItem("cartItems");
+            return savedCard ? JSON.parse(savedCard) : [];
+        } catch {
+            return [];
+        }
     });
 
     useEffect(() => {
