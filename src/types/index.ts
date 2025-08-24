@@ -6,6 +6,8 @@ export interface Product {
     category: string;
     description: string;
     imageUrl: string;
+    featured?: boolean;
+    discount?: number;
 }
 
 export interface CartItem {

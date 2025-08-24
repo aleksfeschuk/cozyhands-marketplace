@@ -8,6 +8,8 @@ export const mockProducts: Product[] = [
     category: "Accessories",
     description: "Warm and cozy scarf crafted from natural wool.",
     imageUrl: "/assets/scarf.jpg",
+    featured: true, 
+    discount: 0.2,
   },
   {
     id: "2",
@@ -24,6 +26,7 @@ export const mockProducts: Product[] = [
     category: "Clothing",
     description: "Soft sweater perfect for cool evenings.",
     imageUrl: "/assets/sweater.jpg",
+    featured: true,
   },
   {
     id: "4",
@@ -32,6 +35,7 @@ export const mockProducts: Product[] = [
     category: "Candles",
     description: "Hand-poured soy wax candle with a soothing lavender scent.",
     imageUrl: "/assets/candle.jpg",
+    discount: 0.15, 
   },
   
   {
@@ -50,5 +54,6 @@ export const mockProducts: Product[] = [
     category: "Bags",
     description: "Durable canvas tote bag with stylish design.",
     imageUrl: "/assets/tote-bag-canvas.jpg",
+    featured: true,
   },
 ];
