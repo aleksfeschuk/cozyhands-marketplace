@@ -40,8 +40,9 @@ const Confirmation: React.FC = () => {
                     {cartItems.map((item) => (
                         <div key={item.id} className="confirmation__item">
                             <span>{item.title}</span>
-                            <span>${item.price * item.quantity}</span>
-                            <span>Total: {item.quantity}</span>
+                            <span>${item.price.toFixed(2)}</span>
+                            <span>Qty: {item.quantity}</span>
+                            <span>Subtotal: ${(item.price * item.quantity).toFixed(2)}</span>
                         </div>
                     ))}
                 </div>

@@ -33,7 +33,7 @@ const Accessories: React.FC = () => {
                             <div className="accessories__product-info">
                                 <h3 className="accessories__product-title">{product.title}</h3>
                                 <p className="accessories__product-category">{product.category}</p>
-                                <p className="accessories__product-price">{product.price.toFixed(2)}</p>
+                                <p className="accessories__product-price">${product.price.toFixed(2)}</p>
                                 <p className="accessories__product-description">{product.description}</p>
                                 <Link
                                     to={`/product/${product.id}`}

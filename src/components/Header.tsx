@@ -13,9 +13,10 @@ const Header: React.FC = () => {
     return (
         <header className='header'>
             <div className="container header__container">
-                <Link to="/" className="header__logo">
+                <Link to="/" className="header__logo" aria-label="CozyHands home">
                     <img
-                    src="/images/logo-cozyhands.svg"
+                        src="/images/logo-cozyhands.svg"
+                        alt='CozyHands'
                         width="120"
                         height="30"
                     /> 

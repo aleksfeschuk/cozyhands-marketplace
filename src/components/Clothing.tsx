@@ -40,7 +40,7 @@ const Clothing: React.FC = () => {
                             <div className="clothing__product-info">
                                 <h3 className="clothing__product-title">{product.title}</h3>
                                 <p className="clothing__product-category">{product.category}</p>
-                                <p className="clothing__product-price">{product.price.toFixed(2)}</p>
+                                <p className="clothing__product-price">${product.price.toFixed(2)}</p>
                                 <p className="clothing__product-description">{product.description}</p>
 
                                 <Link

@@ -1,5 +1,5 @@
 import type React from "react";
-import { BrowserRouter as Router, Routes, Route }  from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate }  from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home";
 import Shop from "./components/Shop";
@@ -21,6 +21,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} >
+            <Route  index element={<Navigate to="all-products" replace />}/>
             <Route path="all-products" element={<AllProducts />}/>
             <Route path="clothing" element={<Clothing />} />
             <Route path="candles" element={<Candles/>}></Route>

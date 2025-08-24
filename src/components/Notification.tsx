@@ -17,7 +17,7 @@ const Notification: React.FC<{ message: string; onClose: () => void }> = ({
     if (!isVisible) return null;
 
     return (
-        <div className="notification">
+        <div className="notification" role="status" aria-live="polite">
             <p>{message}</p>
         </div>
     )

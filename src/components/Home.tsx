@@ -154,7 +154,7 @@ const Home: React.FC = () => {
 
                                 <div className="home__review-body">
                                     <div className="home__review-stars" aria-label={`${r.rating} out of 5`}>
-                                        {"*".repeat(r.rating)}
+                                        {"★".repeat(r.rating)}
                                     </div>
 
                                     <h3 className="home__review-title">Love It!</h3>
@@ -171,8 +171,9 @@ const Home: React.FC = () => {
                             </article>
                         ))}
                     </div>
-
-                    <section className="home__newsletter">
+                </section>
+                
+                <section className="home__newsletter">
                         <div className="home__newsletter-card">
                             <h2 className="home__section-title home__newsletter-title">Stay in the loop</h2>
                             <p className="home__newsletter-text">
@@ -191,7 +192,6 @@ const Home: React.FC = () => {
                             <p className="home__newsletter-hint">We respect your privacy - no spam</p>
                         </div>
                     </section>
-                </section>
             </div>
         </section>
     );

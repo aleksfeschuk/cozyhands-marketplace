@@ -36,7 +36,7 @@ const Sale: React.FC = () => {
                                     <span style={{ textDecoration: "line-through" }}>
                                         ${product.price.toFixed(2)}
                                     </span> {" "}
-                                    ${Math.round(product.price * 0.8).toFixed(2)} (20% off)
+                                    ${(product.price * 0.8).toFixed(2)} (20% off)
                                 </p>
                                 <p className="sale__product-description">{product.description}</p>
                                 <Link
