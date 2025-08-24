@@ -15,6 +15,24 @@
 @use "./Sale.scss";
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap');
 
+html, body, #root {
+    height: 100%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+a {
+        color: inherit;
+        text-decoration: none;
+}
+
+a:hover {
+        color: $butterscotch;
+}
 
 body { 
     background-color: $papaya-whip;
@@ -22,6 +40,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
+    overflow-y: auto;
 }
 
 h1, h2, h3 {
@@ -33,7 +52,7 @@ h1, h2, h3 {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 0 16px;
 }
 
 .btn {
@@ -48,7 +67,7 @@ h1, h2, h3 {
     transition: box-shadow 0.2s;
     &:hover {
         box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
-    };
+    }
 }
 
 .img-holder {
@@ -63,8 +82,9 @@ h1, h2, h3 {
 }
 
 .app-container {
-    min-height: 100vh;
+    min-height: 100%;
     display: flex;
-    flex-direction: column;;
+    flex-direction: column;
+    padding-top: 80px;
 }
 

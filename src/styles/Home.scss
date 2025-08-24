@@ -2,13 +2,11 @@
 @use "./mixins.scss" as *;
 
 .home {
-    height: calc(100vh - 80px);
+    min-height: calc(100vh - 80px);
     background-color: $alabaster;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
+    display: block;
+    overflow: visible;
+    padding: 24px 0 48px;
 }
 
 .home__content {
@@ -63,7 +61,7 @@
 }
 
 .home__categories {
-    margin-bottom: 1.5rem 0 2.5rem;
+    margin: 1.5rem 0 2.5rem;
     text-align: center;
 }
 
@@ -169,7 +167,7 @@
     margin: 0;
 }
 
-.home__featured__all {
+.home__featured-all {
     color: $butterscotch;
     text-decoration: none;
     font-weight: 600;
@@ -200,7 +198,7 @@
     }
 }
 
-.home__badge_discount {
+.home__badge-discount {
     position: absolute;
     top: .5rem;
     left: .5rem;
@@ -344,7 +342,9 @@
 }
 
 .home__newsletter-form {
-    color: $jet;
+    display: flex;          
+    gap: .5rem;             
+    align-items: center;    
     margin: 0 0 1rem;
 }
 
@@ -365,7 +365,7 @@
     background: $butterscotch;
     color: #fff;
     font-weight: 700;
-    transition: background-color .2 ease;
+    transition: background-color .2s ease;
     &:hover {
         background: $butterscotch-light;
     }

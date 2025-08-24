@@ -115,6 +115,11 @@ const Home: React.FC = () => {
                                 to={`/product/${p.id}`}
                                 className="home__featured-card"
                             >
+                                {p.discount && p.discount > 0 && (
+                                    <span className="home__badge-discount">
+                                        {Math.round(p.discount * 100)} % OFF
+                                    </span>
+                                )}
                                 <img 
                                     src={p.imageUrl}
                                     alt={p.title}
