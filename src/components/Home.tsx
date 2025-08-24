@@ -172,7 +172,29 @@ const Home: React.FC = () => {
                         ))}
                     </div>
                 </section>
-                
+
+                <section className="home__blogteaser">
+                    <div className="home__featured-head">
+                        <h2 className="home__featured-title">From our Blog</h2>
+                        <Link to="/blog" className="home__featured-all">View all</Link>
+                    </div>
+
+                    <div className="home__featured-grid">
+                        <Link to="/blog?id=craft-fair-journey" className="home__featured-card">
+                            <div className="home__featured-info">
+                                <h3 className="home__featured-name"> Our Craft Fair Journey</h3>
+                                <span className="home__featured-price">Read →</span>
+                            </div>
+                        </Link>
+                        <Link to="/blog?id=material-matter" className="home__featured-card">
+                            <div className="home__featured-info">
+                                <h3 className="home__featured-name">Materials Matter</h3>
+                                <span className="home__featured-price">Read →</span>
+                            </div>
+                        </Link>
+                    </div>
+                </section>
+
                 <section className="home__newsletter">
                         <div className="home__newsletter-card">
                             <h2 className="home__section-title home__newsletter-title">Stay in the loop</h2>

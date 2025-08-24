@@ -12,6 +12,7 @@ import Candles from "./components/Candles";
 import Accessories from "./components/Accessories";
 import Bags from "./components/Bags";
 import Sale from "./components/Sale";
+import Blog from "./components/Blog";
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             <Route path="sale" element={<Sale/>}></Route>
           </Route>
           <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="blog" element={<Blog />}></Route>
           <Route path="/cart" element={<Cart />} />
           <Route path="/confirmation" element={<Confirmation />} />
           {/* Add more routes as needed */}

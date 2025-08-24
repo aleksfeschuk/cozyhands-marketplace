@@ -65,6 +65,16 @@ const Header: React.FC = () => {
                                 Shop
                             </NavLink>
                         </li>
+                        <li className="header__nav-item">
+                            <NavLink
+                                to="/blog"
+                                className={({ isActive}) =>
+                                    `header__nav-link ${isActive ? "header__nav-link--active" : ""} `
+                                }
+                            > 
+                                Blog
+                            </NavLink>
+                        </li>
                         <li>
                             <NavLink
                                 to="/cart"
