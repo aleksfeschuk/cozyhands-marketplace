@@ -6,8 +6,20 @@ export interface Product {
     category: string;
     description: string;
     imageUrl: string;
-    featured?: boolean;
     discount?: number;
+    featured?: boolean;
+    ratingAvg?: number;
+    ratingCount?: number;
+    createdAt?: string;
+}
+
+export interface Review {
+    id: string;
+    productId: string;
+    author: string;
+    rating: number;
+    text: string;
+    date: string;
 }
 
 export interface CartItem {
