@@ -13,7 +13,7 @@ export default function Reviews({ productId }: {productId: string}) {
 
     useEffect(() => {
         localStorage.setItem(key, JSON.stringify(items)); 
-    }, [items]);
+    }, [items, key]);
 
     const [author, setAuthor] = useState("");
     const [rating, setRating] = useState(5);
