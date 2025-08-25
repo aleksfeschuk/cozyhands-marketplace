@@ -4,6 +4,7 @@ import type { Product } from "../types/index";
 import { mockProducts } from "../data/products";
 import { useCart } from "../context/CartContext";
 import  Notification  from "./Notification";
+import { useWishlist } from "../context/WishListContext";
 
 
 const ProductDetails: React.FC = () => {
@@ -12,7 +13,10 @@ const ProductDetails: React.FC = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const [isEditing, setIsEditing ] = useState(false);
     const [editedProduct, setEditedProduct ] = useState<Product | null>(null)
+    
     const { addToCart } = useCart();
+    const { has, toggle} = useWishlist();
+
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
 
@@ -144,6 +148,14 @@ const ProductDetails: React.FC = () => {
                                 className="product-details__add-btn"
                             >
                                 Add to Cart
+                            </button>
+                            <button
+                                onClick={() => toggle(product.id)}
+                                className="product-details__wishList-btn"
+                                aria-pressed={has(product.id)}
+                                title={has(product.id) ? "Remove from wishlist" : "Add to wishlist"}
+                                >
+                                    {has(product.id) ? "♥ In Wishlist" : "♡ Add to Wishlist"}
                             </button>
                             <button
                                 onClick={() => setIsEditing(true)}
