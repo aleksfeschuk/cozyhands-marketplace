@@ -5,6 +5,8 @@ import { mockProducts } from "../data/products";
 import { useCart } from "../context/CartContext";
 import  Notification  from "./Notification";
 import { useWishlist } from "../context/WishListContext";
+import Reviews from "./Reviews";
+
 
 
 const ProductDetails: React.FC = () => {
@@ -134,6 +136,8 @@ const ProductDetails: React.FC = () => {
                             >
                                 Cancel
                             </button>
+
+                            
                         </>
                     ) : (
                         <>
@@ -163,6 +167,8 @@ const ProductDetails: React.FC = () => {
                             >
                                 Edit
                             </button>
+
+                            <Reviews productId={product.id}/>
                         </>
                     )}
                 </div>

@@ -95,5 +95,74 @@
   color: #fff;
 }
 
+.reviews {
+    margin-top: 1.5rem;
+}
+
+.reviews__title {
+    margin: 0 0 0.75rem;
+}
+
+.reviews__form {
+    display: grid;
+    gap: .5rem;
+    grid-template-columns: 1fr auto;
+}
+
+.reviews__input {
+    grid-column: 1 / span 1;
+    padding: .5rem .75rem;
+    border: 1px solid #e5e5e5;
+    border-radius: .5rem;
+}
+
+.reviews__select {
+    padding: .5rem .75rem;
+    border: 1px solid #e5e5e5;
+    border-radius: .5rem;
+}
+
+.reviews__textarea {
+    grid-column: 1 / -1;
+    padding: .5rem .75rem;
+    border: 1px solid #e5e5e5;
+    border-radius: .5rem;
+}
+
+.reviews__btn {
+    justify-self: start;
+    padding: .5rem 1rem;
+    border: none;
+    border-radius: .5rem;
+    background: $butterscotch;
+    color: #fff;
+    font-weight: 600;
+}
+
+.reviews__list {
+    list-style: none; 
+    padding: 0;
+    margin: 1rem 0 0;
+    display: grid;
+    gap: .75rem;
+}
+
+.reviews__item {
+    background: #fff;
+    border-radius: .5rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+    padding: .75rem;
+}
+
+.reviews__meta {
+    display: flex; 
+    gap: .5rem;
+    align-items: center;
+}
+
+.reviews__stars {
+    margin-left: auto;
+    color: $butterscotch;
+}
 
 
