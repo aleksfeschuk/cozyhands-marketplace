@@ -75,7 +75,7 @@ const Header: React.FC = () => {
                                 Blog
                             </NavLink>
                         </li>
-                        <li>
+                        <li className="header__nav-item">
                             <NavLink
                                 to="/cart"
                                 className={({ isActive }) =>
@@ -87,6 +87,16 @@ const Header: React.FC = () => {
                                 Cart
                             </NavLink>
                         </li>
+                        <li className="header__nav-item">
+                            <NavLink
+                                to="/admin"
+                                className={({ isActive }) =>
+                                    `header__nav-link ${isActive ? "header__nav-link--active" : ""}`}
+                                    onClick={() => setIsMenuOpen(false)}
+                            >
+                                Admin
+                            </NavLink>
+                        </li>   
                     </ul>
                 </nav>
 

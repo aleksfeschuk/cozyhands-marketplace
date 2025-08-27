@@ -201,14 +201,8 @@ const AdminProducts: React.FC = () => {
 
                     <input 
                         type="number"
-                        step="0.01"
-                        min="0"
-                        max="1"
-                        placeholder="Discount (0..1)"
-                        value={draft.discount ?? 0}
-                        onChange={e => 
-                            setDraft({ ...draft, discount: Math.max(0, Math.min(1, parseFloat(e.target.value) || 0)) })
-                        }
+                        value={draft.price ?? 0}
+                        onChange={e => setDraft({...draft, price: parseFloat(e.target.value) || 0 })}
                     />
                 </div>
 
