@@ -4,7 +4,7 @@ import type { Product } from "../types/index";
 import { mockProducts } from "../data/products";
 import { useCart } from "../context/CartContext";
 import  Notification  from "./Notification";
-import { useWishlist } from "../context/hooks/useWishList";
+import { useWishlist } from "../context/hooks/useWishlist";
 import Reviews from "./Reviews";
 
 
