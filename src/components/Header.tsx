@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { useAuth } from '../context/hooks/useAuth';
 
 const Header: React.FC = () => {
     // State to manage the mobile menu visibility
@@ -9,6 +10,8 @@ const Header: React.FC = () => {
     const toggleMenu = () => { 
         setIsMenuOpen((prev) => !prev);
     };
+
+    const { user, loading, signInGoogle, signOutApp } = useAuth();
 
     return (
         <header className='header'>
@@ -107,6 +110,17 @@ const Header: React.FC = () => {
                 >
                     <span className="material-icons">menu</span>
                 </button>
+            </div>
+            <div className="header__auth">
+                {loading ? (
+                    <span className="header__spinner">...</span>
+                ) : user ? (
+                        <>
+                            <button className="header__btn" onClick={signOutApp}>Sign Out</button>
+                        </>
+                    ) : (
+                        <button className="header__btn" onClick={signInGoogle}>Sign In With Google</button>
+                    )}
             </div>
         </header>
     );
