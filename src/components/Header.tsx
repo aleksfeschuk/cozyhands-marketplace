@@ -116,10 +116,11 @@ const Header: React.FC = () => {
                     <span className="header__spinner">...</span>
                 ) : user ? (
                         <>
+                            <span className="header__user">{user.email}</span>
                             <button className="header__btn" onClick={signOutApp}>Sign Out</button>
                         </>
                     ) : (
-                        <button className="header__btn" onClick={signInGoogle}>Sign In With Google</button>
+                        <button className="header__btn" onClick={signInGoogle}>Sign In</button>
                     )}
             </div>
         </header>

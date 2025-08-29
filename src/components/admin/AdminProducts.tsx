@@ -1,24 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Product } from '../../types/index';
-import { mockProducts } from '../../data/products';
+import { useProducts } from "../../context/hooks/useProducts"; 
+import { addProduct, updateProduct, deleteProduct,
+    type ProductWrite,
+ } from '../../data/productsApi';
 
-const deepCopy = <T,>(v:T): T => JSON.parse(JSON.stringify(v));
 
-// product control panel
-
-const AdminProducts: React.FC = () => {
-    const [list, setList] = useState<Product[]>(() => {
-        try {
-            const saved = localStorage.getItem("admin:products");
-            return saved ? JSON.parse(saved) : deepCopy(mockProducts);
-        } catch {
-            return deepCopy(mockProducts);
-        }
-    });
-
+type DraftProduct = Omit<Product, "id" | "createdAt" | "updatedAt"> & { id?: string };
+ 
     // Edit/add form
 
-    const empty: Product = {
+    const emptyDraft: DraftProduct = {
         id: "",
         title: "",
         price: 0,
@@ -26,42 +18,37 @@ const AdminProducts: React.FC = () => {
         description: "",
         imageUrl: "",
         featured: false,
-        discount: 0
+        discount: 0,
     };
 
-    const [draft, setDraft] = useState<Product>(empty);
+    type SortOption = "new" | "price-asc" | "price-desc";
+
+const AdminProducts: React.FC = () => {
+
+    const { items, loading } = useProducts(); 
+
+    const [draft, setDraft] = useState<DraftProduct>(emptyDraft);
     const [editingId, setEditingId] = useState<string | null>(null);
 
     const [q, setQ] = useState("");
     const [cat, setCat] = useState("all");
-
-    type SortOption = "new" | "price-asc" | "price-desc"
     const [sort, setSort] = useState<SortOption>("new");
 
-    useEffect(() => {
-        localStorage.setItem("admin:products", JSON.stringify(list))
-    }, [list]);
-
-    const syncToMock = (next: Product[]) => {
-        mockProducts.length = 0;
-        mockProducts.push(...deepCopy(next));
-        setList(next);
-    };
+    
 
     // Categories are dynamically extracted from the list (for filtering)
 
     const categories = useMemo(() => {
         const set = new Set(
-            list
-            .map(p => p.category)
+            items.map(p => p.category)
             .filter(Boolean));
         return ["all", ...Array.from(set).sort()];
-    }, [list]);
+    }, [items]);
 
 
     // filter and sort list
     const view = useMemo(() => {
-        let cur = list.filter(p => 
+        let cur = items.filter(p => 
             p.title.toLowerCase().includes(q.toLowerCase().trim())
         );
         if (cat !== "all") cur = cur.filter(p => p.category === cat);
@@ -74,56 +61,76 @@ const AdminProducts: React.FC = () => {
                 cur = [...cur].sort((a, b) => b.price - a.price);
                 break;
             case "new":
-                default: 
+            default: 
                 break;
         }
         return cur;
-    }, [list, q, cat, sort]);
+    }, [items, q, cat, sort]);
 
 
-    // CRUD active
+    // CRUD UI handlers
 
     const startCreate = () => {
         setEditingId(null);
-        setDraft(empty);
+        setDraft(emptyDraft);
     };
 
     const startEdit = (p: Product) => {
         setEditingId(p.id);
-        setDraft(deepCopy(p));
+        setDraft({
+            title: p.title ?? "",
+            price: p.price ?? 0,
+            category: p.category ?? "",
+            description: p.description ?? "",
+            imageUrl: p.imageUrl ?? "",
+            featured: !!p.featured,
+            discount: p.discount ?? 0,
+        });
     };
 
     const cancel = () => {
         setEditingId(null);
-        setDraft(empty);
+        setDraft(emptyDraft);
     };
 
-    const save = () => {
-        if (!draft.id.trim()) return alert ("ID is required");
+    const save = async () => {
         if (!draft.title.trim()) return alert("Title is required");
         if (!draft.category.trim()) return alert("Category is required");
         if (draft.price <= 0) return alert("Price must be > 0");
+        if (draft.discount !== null) {
+            const d = Number(draft.discount);
+            if (isNaN(d) || d < 0 || d > 1) return alert("Discount must be 0..1");
+        } 
+
+
         
-        const exists = list.some(p => p.id === draft.id);
-        const next = exists
-            ? list.map(p => p.id === draft.id ? deepCopy(draft) : p)
-            : [deepCopy(draft), ...list];
-        syncToMock(next);
-        cancel();
-    };
+        try {
+            if (editingId) {
+                //update
+                const { id: _ignore, createdAt: _c, updatedAt: _u, ...payload } = draft;
+                await updateProduct(editingId, payload)
+            } else {
+                
+                const { id: _ignore, ...payload} = draft;
+                await addProduct(payload)
+            }
+            cancel()
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : "Failed to save product";
+            alert(msg);
+        }
+    }
 
-    const remove = (id: string) => {
+
+
+    const remove = async (id: string) => {
         if (!confirm("Delete this product")) return;
-        const next = list.filter(p => p.id !== id);
-        syncToMock(next);
-    };
-
-    const resetToMock = () => {
-        if (!confirm("Reset to original mockProducts?")) return;   
-        const next = deepCopy(mockProducts);
-        setList(next);
-
-        localStorage.setItem("admin: products", JSON.stringify(next));
+        try {
+            await deleteProduct(id);
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : "Failed to save product";
+            alert(msg);
+        };
     };
 
     return (
@@ -137,7 +144,9 @@ const AdminProducts: React.FC = () => {
                 />
 
                 <select className="admin__select" value={cat} onChange={e => setCat(e.target.value)}>
-                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                    {categories.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                    ))}
                 </select>
 
                 <select className='adminp__select' value={sort} onChange={e => setSort(e.target.value as SortOption)}>
@@ -148,7 +157,7 @@ const AdminProducts: React.FC = () => {
 
                 <div className="adminp__spacer">
                     <button className="btn" onClick={startCreate}> + New product</button>
-                    <button className="btn btn--guest" onClick={resetToMock}>Reset</button>
+                    
                 </div>
             </div>
 
@@ -160,11 +169,7 @@ const AdminProducts: React.FC = () => {
                 </h3>
 
                 <div className="adminp__grid">
-                    <input 
-                        placeholder="ID unique"
-                        value={draft.id}
-                        onChange={e => setDraft({...draft, id: e.target.value })}
-                    />
+                    
                     <input 
                         placeholder='Title'
                         value={draft.title}
@@ -197,13 +202,31 @@ const AdminProducts: React.FC = () => {
                         Featured
                     </label>
 
-                    {/* discount */}
+                    {/* price */}
 
                     <input 
                         type="number"
+                        step="0.01"
+                        min={0.01}
+                        placeholder='Price'
                         value={draft.price ?? 0}
                         onChange={e => setDraft({...draft, price: parseFloat(e.target.value) || 0 })}
                     />
+
+                    {/* discount */}
+                    <input 
+                        type="number"
+                        step="0.01"
+                        min={0}
+                        max={1}
+                        placeholder='Discount (0..1)'
+                        value={draft.discount ?? 0}
+                        onChange={(e) => 
+                            setDraft({
+                                ...draft,
+                                discount: Math.max(0, Math.min(1, parseFloat(e.target.value) || 0)),
+                            })
+                        }/>
                 </div>
 
                 <div className='adminp__actions'>
@@ -211,55 +234,60 @@ const AdminProducts: React.FC = () => {
                     <button className='btn btn--guest' onClick={cancel}>Cancel</button>
                 </div>
 
-                <table className="adminp__table">
-                    <thead>
-                        <tr>
-                            <th style={{width: 90}}>Image</th>
-                            <th>ID</th>
-                            <th>Title</th>
-                            <th style={{width: 100}}>Price</th>
-                            <th style={{width: 120}}>Category</th>
-                            <th style={{width: 80}}>Featured</th>
-                            <th style={{width: 90}}>Discount</th>
-                            <th style={{width: 140}}></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {view.map(p => (
-                            <tr key={p.id}>
-                                <td>
-                                    {p.imageUrl
-                                        ? <img 
-                                            src={p.imageUrl}
-                                            alt={p.title}
-                                            style={{width: 72, height: 48, objectFit: "cover", borderRadius: 6}}
-                                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display="none";}}
-                                        />
-                                        : <span style={{opacity: .5}}>no image</span>
-                                    }
-                                </td>
-                                <td>{p.id}</td>
-                                <td>{p.title}</td>
-                                <td>${p.price.toFixed(2)}</td>
-                                <td>{p.category}</td>
-                                <td>{p.featured ? "✓" : ""}</td>
-                                <td>{p.discount ? `${Math.round(p.discount * 100)}%` : ""}</td>
-                                <td className='adminp__row-actions'>
-                                    <button onClick={() => startEdit(p)}>Edit</button>
-                                    <button onClick={() => remove(p.id)}>Delete</button>
-                                </td>
-                            </tr>
-                        ))}
-                        {view.length === 0 && (
+
+            {loading ? (
+                <p style={{opacity: .7}}>Loading...</p>
+            ) : (
+                    <table className="adminp__table">
+                        <thead>
                             <tr>
-                                <td colSpan={8} style={{opacity:.7, textAlign: "center"}}>No product found</td>
+                                <th style={{width: 90}}>Image</th>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th style={{width: 100}}>Price</th>
+                                <th style={{width: 120}}>Category</th>
+                                <th style={{width: 80}}>Featured</th>
+                                <th style={{width: 90}}>Discount</th>
+                                <th style={{width: 140}}></th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {view.map(p => (
+                                <tr key={p.id}>
+                                    <td>
+                                        {p.imageUrl
+                                            ? <img 
+                                                src={p.imageUrl}
+                                                alt={p.title}
+                                                style={{width: 72, height: 48, objectFit: "cover", borderRadius: 6}}
+                                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display="none";}}
+                                            />
+                                            : <span style={{opacity: .5}}>no image</span>
+                                        }
+                                    </td>
+                                    <td>{p.id}</td>
+                                    <td>{p.title}</td>
+                                    <td>${p.price.toFixed(2)}</td>
+                                    <td>{p.category}</td>
+                                    <td>{p.featured ? "✓" : ""}</td>
+                                    <td>{p.discount ? `${Math.round(p.discount * 100)}%` : ""}</td>
+                                    <td className='adminp__row-actions'>
+                                        <button onClick={() => startEdit(p)}>Edit</button>
+                                        <button onClick={() => remove(p.id)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {view.length === 0 && (
+                                <tr>
+                                    <td colSpan={8} style={{opacity:.7, textAlign: "center"}}>No product found</td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                )}
             </div>
         </div>
     );
-};
+}
 
 export default AdminProducts;
