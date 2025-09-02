@@ -14,6 +14,7 @@ import Bags from "./components/Bags";
 import Sale from "./components/Sale";
 import Blog from "./components/Blog";
 import Admin from "./components/admin/Admin";
+import PrivateAdmin from "./routes/PrivateAdmin";
 
 const App: React.FC = () => {
   return (
@@ -22,7 +23,9 @@ const App: React.FC = () => {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route element={<PrivateAdmin />}>
+            <Route path="/admin" element={<Admin />} />
+          </Route>
           <Route path="/shop" element={<Shop />} >
             <Route  index element={<Navigate to="all-products" replace />}/>
             <Route path="all-products" element={<AllProducts />}/>

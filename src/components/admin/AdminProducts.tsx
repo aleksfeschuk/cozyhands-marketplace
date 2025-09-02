@@ -11,7 +11,6 @@ type DraftProduct = Omit<Product, "id" | "createdAt" | "updatedAt"> & { id?: str
     // Edit/add form
 
     const emptyDraft: DraftProduct = {
-        id: "",
         title: "",
         price: 0,
         category: "",
@@ -99,23 +98,29 @@ const AdminProducts: React.FC = () => {
         if (draft.price <= 0) return alert("Price must be > 0");
         if (draft.discount !== null) {
             const d = Number(draft.discount);
-            if (isNaN(d) || d < 0 || d > 1) return alert("Discount must be 0..1");
+            if (Number.isNaN(d) || d < 0 || d > 1) return alert("Discount must be 0..1");
         } 
 
 
-        
+        const payload: ProductWrite = {
+            title: draft.title.trim(),
+            price: Number(draft.price),
+            category: draft.category.trim(),
+            description: draft.description.trim(),
+            imageUrl: draft.imageUrl.trim(),
+            featured: !!draft.featured,
+            discount: Number(draft.discount) || 0,
+        };
+
         try {
             if (editingId) {
                 //update
-                const { id: _ignore, createdAt: _c, updatedAt: _u, ...payload } = draft;
                 await updateProduct(editingId, payload)
             } else {
-                
-                const { id: _ignore, ...payload} = draft;
                 await addProduct(payload)
             }
             cancel()
-        } catch (e) {
+        } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : "Failed to save product";
             alert(msg);
         }
