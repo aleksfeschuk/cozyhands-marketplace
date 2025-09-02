@@ -1,49 +1,55 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { mockProducts } from "../data/products";
+import { useProducts } from "../context/hooks/useProducts";
 import FiltersBar from "./FilterBar";
 import '../styles/AllProducts.scss';
 
-const categories = Array.from(new Set(mockProducts.map(p => p.category)));
-
-function applyFilterSort(sp: URLSearchParams) {
-    let list = [...mockProducts];
-
-    const q = (sp.get("q") ?? "").trim().toLowerCase();
-    const cat = (sp.get("cat") ?? "");
-    const min = parseFloat(sp.get("min") ?? "");
-    const max = parseFloat(sp.get("max") ?? "");
-    const sort = sp.get("sort") ?? "";
-
-    if (q) list = list.filter(p => p.title.toLowerCase().includes(q));
-    if (cat) list = list.filter(p => p.category === cat);
-    if (!isNaN(min)) list = list.filter(p => p.price >= min);
-    if (!isNaN(max)) list = list.filter(p => p.price <= max);
-
-    switch (sort) {
-        case "price-asc": 
-            list.sort((a, b) => a.price - b.price); 
-            break;
-        case "price-desc": 
-            list.sort((a, b) => b.price - a.price); 
-            break;
-        case "rating": 
-            list.sort((a, b) => (b.ratingAvg ?? 0) - (a.ratingAvg ?? 0));
-            break;
-        case "newest":
-            list.sort((a, b) => {
-                const dateA = new Date(a.createdAt ?? 0).getTime();
-                const dateB = new Date(b.createdAt ?? 0).getTime();
-                return dateB - dateA;
-            });
-            break;
-    }
-    return list;
-}
 
 const AllProducts: React.FC = () => {
 
     const [sp] = useSearchParams();
+    const {items, loading} = useProducts();
+
+
+    const categories = Array.from(new Set(items.map(p => p.category))).filter(Boolean);
+
+    function applyFilterSort(sp: URLSearchParams) {
+        let list = [...items];
+
+        const q = (sp.get("q") ?? "").trim().toLowerCase();
+        const cat = (sp.get("cat") ?? "");
+        const min = parseFloat(sp.get("min") ?? "");
+        const max = parseFloat(sp.get("max") ?? "");
+        const sort = sp.get("sort") ?? "";
+
+        if (q) list = list.filter(p => p.title.toLowerCase().includes(q));
+        if (cat) list = list.filter(p => p.category === cat);
+        if (!isNaN(min)) list = list.filter(p => p.price >= min);
+        if (!isNaN(max)) list = list.filter(p => p.price <= max);
+
+        switch (sort) {
+            case "price-asc": 
+                list.sort((a, b) => a.price - b.price); 
+                break;
+            case "price-desc": 
+                list.sort((a, b) => b.price - a.price); 
+                break;
+            case "rating": 
+                list.sort((a, b) => (b.ratingAvg ?? 0) - (a.ratingAvg ?? 0));
+                break;
+            case "newest":
+                list.sort((a, b) => {
+                    const dateA = new Date(a.createdAt ?? 0).getTime();
+                    const dateB = new Date(b.createdAt ?? 0).getTime();
+                    return dateB - dateA;
+                });
+                break;
+        }
+        return list;
+    }
+
     const products = applyFilterSort(sp);
+
+    if (loading) return <div className="container">Loading...</div>
 
     return (
         <section className="all-products">
