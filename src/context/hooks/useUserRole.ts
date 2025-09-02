@@ -1,30 +1,21 @@
 import { useEffect, useState }  from "react";
-import { getUserRole }  from "../../data/usersApi";
-import type { User } from "firebase/auth";
+import { db } from "../../firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import { useAuth } from "../hooks/useAuth";
 
-export function useUserRole(user: User | null) {
-    const [role, setRole] = useState<"admin" | "user">("user");
-    const [loading, setLoading] = useState(true);
+export function useUserRole() {
+  const { user } = useAuth();
+  const [role, setRole] = useState<"admin" | "user" | null>(null);
+  const [loading, setLoading] = useState(!!user);
 
-    useEffect(() => {
-        let cancelled = false;
-        async function run() {
-            if (!user) {
-                setRole("user");
-                setLoading(false);
-                return;
-            }
-            const r = await getUserRole(user.uid);
-            if (!cancelled) {
-                setRole(r);
-                setLoading(false);
-            }
-        }
-        run();
-            return () => {
-                cancelled = true;
-            }
-    }, [user]);
+  useEffect(() => {
+    if (!user) { setRole(null); setLoading(false); return; }
+    const unsub = onSnapshot(doc(db, "users", user.uid), (d) => {
+      setRole((d.data()?.role ?? "user") as "admin" | "user");
+      setLoading(false);
+    });
+    return () => unsub();
+  }, [user]);
 
-    return { role, loading };
+  return { role, loading };
 }
