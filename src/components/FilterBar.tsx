@@ -1,5 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useDebouncedValue } from "../context/hooks/useDebouncedValue";
+
 
 type Props = { categories: string[] };
 
@@ -14,6 +16,21 @@ export default function FiltersBar({ categories}: Props) {
         sort: sp.get("sort") ?? "",
     }), [sp]);
 
+    // local state only for q
+
+    const [qLocal, setQLocal] = useState(values.q);
+    useEffect(() => setQLocal(values.q), [values.q]);
+
+    const qDebounced = useDebouncedValue(qLocal, 350);
+
+    useEffect(() => {
+        const next = new URLSearchParams(sp);
+        if (qDebounced.trim()) next.set("q", qDebounced);
+        else next.delete("q");
+        setSp(next, { replace: true });
+    }, [qDebounced]) // eslint-disable-line react-hooks/exhaustive-deps
+
+
     const set = (key: string, val: string) => {
         const next = new URLSearchParams(sp);
         if (val.trim() !== "") {
@@ -21,7 +38,7 @@ export default function FiltersBar({ categories}: Props) {
         } else {
             next.delete(key);
         }
-
+        next.delete("page");
         setSp(next, { replace: true });
     };
 
