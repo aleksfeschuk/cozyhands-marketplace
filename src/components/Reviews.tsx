@@ -1,43 +1,71 @@
-import { useEffect, useState } from "react";
-import type { Review } from "../types/index";
+import { useState } from "react";
+import { useReviews } from "../context/hooks/useReviews";
+import { addReview } from "../data/reviewsApi";
+import { useAuth } from "../context/hooks/useAuth";
+import type { Timestamp } from "firebase/firestore";
 
-export default function Reviews({ productId }: {productId: string}) {
-    const key = `reviews:${productId}`;
-    const [items, setItems] = useState<Review[]>(() => {
-        try {
-            return JSON.parse(localStorage.getItem(key) || "[]");
-        } catch {
-            return [];
-        }
-    });
+type Props = {
+    productId: string;
+}
 
-    useEffect(() => {
-        localStorage.setItem(key, JSON.stringify(items)); 
-    }, [items, key]);
+function toDateStr(v: Timestamp | Date | string | number | null | undefined): string {
+    if (!v) return "";
+    let date: Date;
 
-    const [author, setAuthor] = useState("");
+    if (typeof v === "object" && "toDate" in v && typeof v.toDate === "function") {
+        date = v.toDate();
+    } else if (typeof v === "number" || typeof v === "string") {
+        date = new Date(v);
+    } else {
+        return ""
+    }
+
+    return isNaN(date.getTime()) ? "" : date.toLocaleDateString();
+}
+
+export default function Reviews({ productId }: Props) {
+    
+    const {items, loading} = useReviews(productId);
+    const { user } = useAuth();
+    
+    const [author, setAuthor] = useState(user?.displayName || "");
     const [rating, setRating] = useState(5);
     const [text, setText] = useState("");
 
-    const add = () => {
-        if (!author.trim() || !text.trim()) return;
-        const r: Review = {
-            id: crypto.randomUUID(),
+    const submit = async () => {
+        if (!author.trim()) return alert("Enter your name");
+        if (!text.trim() || text.trim().length < 4) return alert("The text is too short ");
+        if (rating < 1 || rating > 5) return alert("Rating must be between 1 and 5");
+
+        try {
+        await addReview({
             productId,
             author: author.trim(),
             rating,
             text: text.trim(),
-            date: new Date().toISOString(),
+            userId: user?.uid ?? null,
+        });
+            setText("");
+            setRating(5);
+            if (!user?.displayName) setAuthor("");
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : "Failed to submit review";
+            alert(msg);
         };
-        setItems([r, ...items]);
-        setAuthor("");
-        setText("");
-        setRating(5);
-    };
+    }
+
+    
+
+    const avg = items.length
+        ? (items.reduce((sum, r) => sum + (r.rating || 0), 0) / items.length).toFixed(1)
+        : null;
 
     return (
         <section className="reviews">
-            <h3 className="reviews__title"> Customer Reviews</h3>
+            <h3 className="reviews__title"> 
+                
+                Reviws {avg ? `• Average rating: ${avg} ★` : ""}
+            </h3>
 
             <div className="reviews__form">
                 <input
@@ -58,22 +86,32 @@ export default function Reviews({ productId }: {productId: string}) {
                     rows={3}
                 />
                 
-                <button onClick={add} className="reviews__btn">Submit review</button>
+                <button onClick={submit} className="reviews__btn">Submit review</button>
+
+                {!user && (
+                    <p className="reviews__hint">
+                        * You are not logged in - review will be posted as a guest (userId: null)
+                    </p>
+                )}
             </div>
 
-            <ul className="reviews__list">
-                {items.map(r => (
-                    <li key={r.id} className="reviews__item">
-                        <div className="reviews__meta">
-                            <strong>{r.author}</strong>
-                            <span>· {new Date(r.date).toLocaleDateString()}</span>
-                            <span className="reviews__stars">{"★".repeat(r.rating)}</span>
-                        </div>
-                        <p className="reviews__text">{r.text}</p>
-                    </li>
-                ))}
-                {items.length === 0 && <p>No reviews yet. Be the first</p>}
-            </ul>
+            {loading ? (
+                <p style={{ opacity: 0.7}}>Loading...</p>
+            ) : (
+                <ul className="reviews__list">
+                    {items.map(r => (
+                        <li key={r.id} className="reviews__item">
+                            <div className="reviews__meta">
+                                <strong>{r.author}</strong>
+                                <span>· {toDateStr(r.createdAt)}</span>
+                                <span className="reviews__stars">{"★".repeat(r.rating)}</span>
+                            </div>
+                            <p className="reviews__text">{r.text}</p>
+                        </li>
+                    ))}
+                    {items.length === 0 && <p>No reviews yet. Be the first</p>}
+                </ul>
+            )}
         </section>
     );
-}
+};
