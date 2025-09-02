@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useMemo } from "react";
 import { useProducts } from "../context/hooks/useProducts";
+import Pagination from "./Pagination";
 import type { Product } from "../types";
 import FiltersBar from "./FilterBar";
 import '../styles/AllProducts.scss';
@@ -56,29 +57,31 @@ const AllProducts: React.FC = () => {
     const [sp] = useSearchParams();
     const {items, loading} = useProducts();
 
+    const perPage = 12;
+    const page = Math.max(parseInt(sp.get("page") ?? "1", 10) || 1, 1);
 
     const categories = useMemo(
         () => Array.from(new Set(items.map(p => p.category))).filter(Boolean),
         [items]
     );
 
-    const products = useMemo(() => applyFilterSort(sp, items), [sp, items]);
+    const filtered = useMemo(() => applyFilterSort(sp, items), [sp, items]);
 
     if (loading) return <div className="container">Loading...</div>
 
+    const start = (page - 1) * perPage;
+    const paged = filtered.slice(start, start + perPage);
     
-   
-
 
     return (
         <section className="all-products">
             <div className="container all-products__container">
                 <h2 className="all-products__title">All products</h2>
 
-                <FiltersBar categories={categories}></FiltersBar>
+                <FiltersBar categories={categories} />
 
                 <div className="all-products__grid">
-                    {products.map((product) => (
+                    {paged.map((product) => (
                         <div key={product.id} className="all-products__product-card">
                             <div className="all-products__product-image">
                                 <img 
@@ -106,9 +109,11 @@ const AllProducts: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                    {products.length === 0 && <p>No products match your filters</p>}
+                    {paged.length === 0 && <p>No products match your filters</p>}
                 </div>
             </div>
+
+            <Pagination total={filtered.length} perPage={perPage} />
         </section>
     )
 }
