@@ -40,7 +40,9 @@ export default function FiltersBar({ categories}: Props) {
                 onChange={(e) => set("cat", e.target.value)}
             >
                 <option value="">All categories</option>
-                {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+                {categories.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                ))}
             </select>
 
             <input 
@@ -63,15 +65,21 @@ export default function FiltersBar({ categories}: Props) {
                 className="filters__select"
                 value={values.sort}
                 onChange={(e) => set("sort", e.target.value)}
-            ></select>
+            >
+                <option value="">Sort by</option>
+                <option value="price-asc">Price ↑</option>
+                <option value="price-desc">Price ↓</option>
+                <option value="rating">Rating</option>
+                <option value="newest">Newest</option>
+            </select>
 
-            <option value="">Sort by</option>
-            <option value="price-asc">Price ↑</option>
-            <option value="price-desc">Price ↓</option>
-            <option value="rating">Rating</option>
-            <option value="newest">Newest</option>
 
-            <button className="filters__clear" onClick={() => setSp({}, {replace: true})}>Reset</button>
+            <button 
+                className="filters__clear" 
+                onClick={() => setSp({}, {replace: true})}
+                >
+                    Reset
+            </button>
         </div>
     )
 }
