@@ -36,6 +36,7 @@ const ProductDetails: React.FC = () => {
         )
     }
 
+    
 
 
     const handleAddToCart = () => {

@@ -10,17 +10,17 @@ type DraftProduct = Omit<Product, "id" | "createdAt" | "updatedAt"> & { id?: str
  
     // Edit/add form
 
-    const emptyDraft: DraftProduct = {
-        title: "",
-        price: 0,
-        category: "",
-        description: "",
-        imageUrl: "",
-        featured: false,
-        discount: 0,
-    };
+const emptyDraft: DraftProduct = {
+    title: "",
+    price: NaN,
+    category: "",
+    description: "",
+    imageUrl: "",
+    featured: false,
+    discount: 0,
+};
 
-    type SortOption = "new" | "price-asc" | "price-desc";
+type SortOption = "new" | "price-asc" | "price-desc";
 
 const AdminProducts: React.FC = () => {
 
@@ -32,17 +32,19 @@ const AdminProducts: React.FC = () => {
     const [q, setQ] = useState("");
     const [cat, setCat] = useState("all");
     const [sort, setSort] = useState<SortOption>("new");
+    const [error, setError] = useState<string>("");
 
     
 
     // Categories are dynamically extracted from the list (for filtering)
 
-    const categories = useMemo(() => {
-        const set = new Set(
-            items.map(p => p.category)
-            .filter(Boolean));
-        return ["all", ...Array.from(set).sort()];
-    }, [items]);
+   const categories = useMemo(
+        () =>
+            ["all"].concat(
+                Array.from(new Set(items.map((p) => p.category).filter(Boolean))).sort()
+            ),
+        [items]
+    );
 
 
     // filter and sort list
@@ -72,59 +74,76 @@ const AdminProducts: React.FC = () => {
     const startCreate = () => {
         setEditingId(null);
         setDraft(emptyDraft);
+        setError("");
     };
 
     const startEdit = (p: Product) => {
         setEditingId(p.id);
         setDraft({
             title: p.title ?? "",
-            price: p.price ?? 0,
+            price:  Number.isFinite(p.price) ? p.price : NaN,
             category: p.category ?? "",
             description: p.description ?? "",
             imageUrl: p.imageUrl ?? "",
             featured: !!p.featured,
-            discount: p.discount ?? 0,
+            discount: Number.isFinite(p.discount as number) ? Number(p.discount) : 0,
         });
+        setError("");
     };
 
     const cancel = () => {
         setEditingId(null);
         setDraft(emptyDraft);
+        setError("");
     };
 
     const save = async () => {
-        if (!draft.title.trim()) return alert("Title is required");
-        if (!draft.category.trim()) return alert("Category is required");
-        if (draft.price <= 0) return alert("Price must be > 0");
-        if (draft.discount !== null) {
-            const d = Number(draft.discount);
-            if (Number.isNaN(d) || d < 0 || d > 1) return alert("Discount must be 0..1");
-        } 
+        setError("");
 
+        if (!draft.title.trim()) {
+            setError("Title is required");
+            return;
+        }
+        if (!draft.category.trim()) {
+            setError("Category is required");
+            return;
+        }
+
+        const priceNum = Number(draft.price);
+        if (!Number.isFinite(priceNum) || priceNum <= 0) {
+            setError("Price must be > 0");
+            return;
+        }
+
+        const d = Number(draft.discount);
+        if (Number.isNaN(d) || d < 0 || d > 1) {
+            setError("Discount must be 0..1");
+            return;
+        }
 
         const payload: ProductWrite = {
             title: draft.title.trim(),
-            price: Number(draft.price),
+            price: priceNum,
             category: draft.category.trim(),
             description: draft.description.trim(),
             imageUrl: draft.imageUrl.trim(),
             featured: !!draft.featured,
-            discount: Number(draft.discount) || 0,
+            discount: d || 0,
         };
 
         try {
             if (editingId) {
-                //update
-                await updateProduct(editingId, payload)
+            await updateProduct(editingId, payload);
             } else {
-                await addProduct(payload)
+            await addProduct(payload);
             }
-            cancel()
-        } catch (e: unknown) {
+            cancel();
+        } catch (e) {
             const msg = e instanceof Error ? e.message : "Failed to save product";
-            alert(msg);
+            setError(msg);
         }
-    }
+    };
+
 
 
 
@@ -137,6 +156,8 @@ const AdminProducts: React.FC = () => {
             alert(msg);
         };
     };
+
+
 
     return (
         <div className='adminp'>
@@ -173,6 +194,10 @@ const AdminProducts: React.FC = () => {
                     {editingId ? `Edit: ${editingId}` : "Create product"}
                 </h3>
 
+                {error && (
+                    <div style={{ marginBottom: 12, color: "#b00020" }}>{error}</div>
+                )}
+
                 <div className="adminp__grid">
                     
                     <input 
@@ -182,9 +207,17 @@ const AdminProducts: React.FC = () => {
                     />
                     <input 
                         placeholder='Category'
+                        list="category-datalist"
                         value={draft.category}
-                        onChange={e => setDraft({...draft, category: e.target.value})}
+                        onChange={(e) => setDraft({...draft, category: e.target.value})}
                     />
+                    <datalist id="categories-datalist">
+                        {Array.from(new Set(items.map((p) => p.category).filter(Boolean)))
+                            .sort()
+                            .map((c) => (
+                                <option key={c} value={c}/>
+                            ))}
+                    </datalist>
                     <input 
                         placeholder="Image URL"
                         value={draft.imageUrl}
@@ -209,13 +242,18 @@ const AdminProducts: React.FC = () => {
 
                     {/* price */}
 
-                    <input 
+                    <input
                         type="number"
                         step="0.01"
                         min={0.01}
-                        placeholder='Price'
-                        value={draft.price ?? 0}
-                        onChange={e => setDraft({...draft, price: parseFloat(e.target.value) || 0 })}
+                        placeholder="Price"
+                        value={Number.isFinite(draft.price) ? String(draft.price) : ""}
+                        onChange={(e) =>
+                            setDraft({
+                            ...draft,
+                            price: e.target.value === "" ? NaN : Number(e.target.value),
+                            })
+                        }
                     />
 
                     {/* discount */}
@@ -225,17 +263,18 @@ const AdminProducts: React.FC = () => {
                         min={0}
                         max={1}
                         placeholder='Discount (0..1)'
-                        value={draft.discount ?? 0}
-                        onChange={(e) => 
+                        value={Number.isFinite(draft.discount as number) ? Number(draft.discount) : ""}
+                        onChange={(e) =>
                             setDraft({
-                                ...draft,
-                                discount: Math.max(0, Math.min(1, parseFloat(e.target.value) || 0)),
+                            ...draft,
+                            discount: Math.max(0, Math.min(1, Number(e.target.value) || 0)),
                             })
-                        }/>
+                        }
+                    />
                 </div>
 
                 <div className='adminp__actions'>
-                    <button className='btn' onClick={save}>Save</button>
+                    <button className='btn' onClick={save} >Save</button>
                     <button className='btn btn--guest' onClick={cancel}>Cancel</button>
                 </div>
 

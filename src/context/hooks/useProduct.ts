@@ -16,8 +16,12 @@ export function useProduct(id?: string) {
         }
 
         const unsub = onSnapshot(doc(db, "products", id), (d) => {
-            setItem({ id: d.id, ...(d.data() as Omit<Product, "id">)
-            });
+            if (!d.exists()) {
+                setItem(null);
+                setLoading(false);
+                return;
+            }
+            setItem({ id: d.id, ...(d.data() as Omit<Product, "id">) });
             setLoading(false);   
         });
         return () => unsub();
