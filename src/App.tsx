@@ -15,6 +15,8 @@ import Sale from "./components/Sale";
 import Blog from "./components/Blog";
 import AdminProducts from "./components/admin/AdminProducts";
 import RequireAdmin from "./components/RequireAdmin";
+import AdminPosts from "./components/admin/AdminPosts";
+import BlogPost from "./components/BlogPost";
 
 const App: React.FC = () => {
   return (
@@ -28,6 +30,7 @@ const App: React.FC = () => {
             element={
                     <RequireAdmin>
                       <AdminProducts />
+                      <AdminPosts />
                     </RequireAdmin>} 
             />
           <Route path="/shop" element={<Shop />} >
@@ -40,7 +43,8 @@ const App: React.FC = () => {
             <Route path="sale" element={<Sale/>}></Route>
           </Route>
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="blog" element={<Blog />}></Route>
+          <Route path="/blog" element={<Blog />}></Route>
+          <Route path="/blog/:slug" element={<BlogPost />}></Route>
           <Route path="/cart" element={<Cart />} />
           <Route path="/confirmation" element={<Confirmation />} />
           {/* Add more routes as needed */}

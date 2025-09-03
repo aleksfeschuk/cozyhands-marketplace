@@ -1,3 +1,5 @@
+export * from "./Blog";
+
 // interfaces for e-commerce application types
 export interface Product {
     id: string;
@@ -35,3 +37,4 @@ export interface User {
     email: string | null;
     role?: "admin" | "user";
 }
+

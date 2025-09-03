@@ -19,6 +19,7 @@ import { db } from "../firebase";
 export type PostWrite = {
     title: string;
     slug: string;
+    excerpt: string;
     coverImage: string; 
     content: string;    //markdown
     tags: string[]; // ["react", "ui"];

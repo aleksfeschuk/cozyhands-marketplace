@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { listenPostBySlug, type Post } from "../../data/postApi";
 
-export function useBlogPosts(slug?: string) {
+export function useBlogPost(slug?: string) {
     const [item, setItem] = useState<Post | null>(null);
     const [loading, setLoading] = useState(!!slug);
 
