@@ -4,6 +4,7 @@ import { useProducts } from "../../context/hooks/useProducts";
 import { addProduct, updateProduct, deleteProduct,
     type ProductWrite,
  } from '../../data/productsApi';
+import { uploadImageFile } from '../../data/storage';
 
 
 type DraftProduct = Omit<Product, "id" | "createdAt" | "updatedAt"> & { id?: string };
@@ -34,6 +35,9 @@ const AdminProducts: React.FC = () => {
     const [sort, setSort] = useState<SortOption>("new");
     const [error, setError] = useState<string>("");
 
+
+    const [file, setFile] = useState<File | null>(null);
+    const [uploadPct, setUploadPct] = useState<number>(0)
     
 
     // Categories are dynamically extracted from the list (for filtering)
@@ -75,6 +79,8 @@ const AdminProducts: React.FC = () => {
         setEditingId(null);
         setDraft(emptyDraft);
         setError("");
+        setFile(null);
+        setUploadPct(0);
     };
 
     const startEdit = (p: Product) => {
@@ -89,12 +95,16 @@ const AdminProducts: React.FC = () => {
             discount: Number.isFinite(p.discount as number) ? Number(p.discount) : 0,
         });
         setError("");
+        setFile(null);
+        setUploadPct(0);
     };
 
     const cancel = () => {
         setEditingId(null);
         setDraft(emptyDraft);
         setError("");
+        setFile(null);
+        setUploadPct(0);
     };
 
     const save = async () => {
@@ -121,22 +131,25 @@ const AdminProducts: React.FC = () => {
             return;
         }
 
-        const payload: ProductWrite = {
-            title: draft.title.trim(),
-            price: priceNum,
-            category: draft.category.trim(),
-            description: draft.description.trim(),
-            imageUrl: draft.imageUrl.trim(),
-            featured: !!draft.featured,
-            discount: d || 0,
-        };
-
         try {
-            if (editingId) {
-            await updateProduct(editingId, payload);
-            } else {
-            await addProduct(payload);
+            let imageUrl = draft.imageUrl.trim();
+            if (file) {
+                imageUrl = await uploadImageFile(file, { folder: "products", onProgress: setUploadPct });
             }
+
+            const payload: ProductWrite = {
+                title: draft.title.trim(),
+                price: priceNum,
+                category: draft.category.trim(),
+                description: draft.description.trim(),
+                imageUrl,
+                featured: !!draft.featured,
+                discount: d || 0,
+            };
+
+            if (editingId) await updateProduct(editingId, payload);
+            else await addProduct(payload);
+
             cancel();
         } catch (e) {
             const msg = e instanceof Error ? e.message : "Failed to save product";
@@ -152,7 +165,7 @@ const AdminProducts: React.FC = () => {
         try {
             await deleteProduct(id);
         } catch (e) {
-            const msg = e instanceof Error ? e.message : "Failed to save product";
+            const msg = e instanceof Error ? e.message : "Failed to delete product";
             alert(msg);
         };
     };
@@ -219,15 +232,21 @@ const AdminProducts: React.FC = () => {
                             ))}
                     </datalist>
                     <input 
-                        placeholder="Image URL"
-                        value={draft.imageUrl}
-                        onChange={e => setDraft({...draft, imageUrl: e.target.value})}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            const f = e.target.files?.[0] ?? null;
+                            setFile(f);
+                        }}
                     />
                     <input 
                         placeholder='Description'
                         value={draft.description}
                         onChange={e => setDraft({...draft, description: e.target.value})}
                     />
+                    {uploadPct > 0 && uploadPct < 100 && (
+                        <div style={{ fontSize: 12, opacity: 0.8 }}>Uploading: {uploadPct}%</div>
+                    )}
 
                     {/* featured */}
 
