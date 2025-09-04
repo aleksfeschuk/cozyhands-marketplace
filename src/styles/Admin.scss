@@ -144,3 +144,11 @@
         background: #f8f8f8;
     };
 }
+
+.adminp__thumb {
+    width: 72px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}

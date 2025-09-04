@@ -5,6 +5,7 @@ import Pagination from "./Pagination";
 import type { Product } from "../types";
 import FiltersBar from "./FilterBar";
 import '../styles/AllProducts.scss';
+import { ProductImage } from "./ProductImage";
 
 
 function toMs(v: unknown): number {
@@ -84,8 +85,9 @@ const AllProducts: React.FC = () => {
                     {paged.map((product) => (
                         <div key={product.id} className="all-products__product-card">
                             <div className="all-products__product-image">
-                                <img 
-                                    src={product.imageUrl}
+                                <ProductImage 
+                                    imageUrl={product.imageUrl}
+                                    imagePath={product.imagePath}
                                     alt={product.title}
                                     className="all-products__product-img"
                                 />

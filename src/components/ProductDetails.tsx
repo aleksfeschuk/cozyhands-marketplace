@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import  Notification  from "./Notification";
 import { useWishlist } from "../context/hooks/useWishlist";
 import Reviews from "./Reviews";
+import { ProductImage } from "./ProductImage";
 
 
 
@@ -55,8 +56,9 @@ const ProductDetails: React.FC = () => {
         <section className ="product-details">
             <div className = "container product-details__container">
                 <div className="product-details__image">
-                    <img 
-                        src={product.imageUrl}
+                    <ProductImage
+                        imageUrl={product.imageUrl}
+                        imagePath={product.imagePath}
                         alt={product.title}
                         className="product-details__img"
                     />

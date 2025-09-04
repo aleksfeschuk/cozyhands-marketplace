@@ -8,6 +8,7 @@ export interface Product {
     category: string;
     description: string;
     imageUrl: string;
+    imagePath?: string;
     discount?: number;
     featured?: boolean;
     ratingAvg?: number;

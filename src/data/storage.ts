@@ -3,18 +3,19 @@ import {
     ref,
     uploadBytesResumable,
     getDownloadURL,
-    deleteObject
+    deleteObject,
 } from "firebase/storage";
 
-type UploadOpts = {
+export type UploadOpts = {
     folder?: string;
     onProgress?: (pct: number) => void;
 }
 
+export type UploadImage = {url: string, path: string};
 
 export async function uploadImageFile(
     file: File,
-    opts?: UploadOpts): Promise<string> {
+    opts?: UploadOpts): Promise<UploadImage> {
 
         const storage = getStorage();
         const folder = opts?.folder ?? "images";
@@ -25,20 +26,21 @@ export async function uploadImageFile(
 
         await new Promise<void>((resolve, reject) => {
             task.on(
-                "state_changed",
-                (s) => {
-                    const pct = (s.bytesTransferred / s.totalBytes) * 100;
-                    opts?.onProgress?.(Math.round(pct));
-                },
-                reject,
-                () => resolve()
-        );
-    });
-
-    return await getDownloadURL(task.snapshot.ref);
+                 "state_changed",
+                    (s) => {
+                        const pct = (s.bytesTransferred / s.totalBytes) * 100;
+                        opts?.onProgress?.(Math.round(pct));
+                    },
+                    reject,
+                    () => resolve()
+            );
+            
+        });
+    const url = await getDownloadURL(task.snapshot.ref);
+    return { url, path }
 }
 
 export async function deleteImageByPath(path: string) {
-    const storage = getStorage();
-    await deleteObject(ref(storage, path));
+  const storage = getStorage();
+  await deleteObject(ref(storage, path));
 }

@@ -5,6 +5,7 @@ import { addProduct, updateProduct, deleteProduct,
     type ProductWrite,
  } from '../../data/productsApi';
 import { uploadImageFile } from '../../data/storage';
+import { ProductImage } from "../ProductImage";
 
 
 type DraftProduct = Omit<Product, "id" | "createdAt" | "updatedAt"> & { id?: string };
@@ -91,6 +92,7 @@ const AdminProducts: React.FC = () => {
             category: p.category ?? "",
             description: p.description ?? "",
             imageUrl: p.imageUrl ?? "",
+            imagePath: p.imagePath ?? "",
             featured: !!p.featured,
             discount: Number.isFinite(p.discount as number) ? Number(p.discount) : 0,
         });
@@ -133,8 +135,12 @@ const AdminProducts: React.FC = () => {
 
         try {
             let imageUrl = draft.imageUrl.trim();
+            let imagePath = draft.imagePath?.trim() ?? "";
+            
             if (file) {
-                imageUrl = await uploadImageFile(file, { folder: "products", onProgress: setUploadPct });
+                const up = await uploadImageFile(file, { folder: "products", onProgress: setUploadPct });
+                imageUrl = up.url;
+                imagePath = up.path;
             }
 
             const payload: ProductWrite = {
@@ -143,6 +149,7 @@ const AdminProducts: React.FC = () => {
                 category: draft.category.trim(),
                 description: draft.description.trim(),
                 imageUrl,
+                imagePath,
                 featured: !!draft.featured,
                 discount: d || 0,
             };
@@ -220,7 +227,7 @@ const AdminProducts: React.FC = () => {
                     />
                     <input 
                         placeholder='Category'
-                        list="category-datalist"
+                        list="categories-datalist"
                         value={draft.category}
                         onChange={(e) => setDraft({...draft, category: e.target.value})}
                     />
@@ -231,6 +238,12 @@ const AdminProducts: React.FC = () => {
                                 <option key={c} value={c}/>
                             ))}
                     </datalist>
+
+                    <input 
+                        placeholder="Image URL (optional)"
+                        value={draft.imageUrl}
+                        onChange={(e) => setDraft({ ...draft, imageUrl: e.target.value})}
+                    />
                     <input 
                         type="file"
                         accept="image/*"
@@ -318,15 +331,12 @@ const AdminProducts: React.FC = () => {
                             {view.map(p => (
                                 <tr key={p.id}>
                                     <td>
-                                        {p.imageUrl
-                                            ? <img 
-                                                src={p.imageUrl}
-                                                alt={p.title}
-                                                style={{width: 72, height: 48, objectFit: "cover", borderRadius: 6}}
-                                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display="none";}}
-                                            />
-                                            : <span style={{opacity: .5}}>no image</span>
-                                        }
+                                        <ProductImage 
+                                            imageUrl={p.imageUrl}
+                                            imagePath={p.imagePath}
+                                            alt={p.title}
+                                            className="adminp__thumb"
+                                        />
                                     </td>
                                     <td>{p.id}</td>
                                     <td>{p.title}</td>
