@@ -6,6 +6,9 @@ $licorice: #1A1818;
 $alabaster: #F8F3E9;
 $butterscotch-light: #F5CDA7;
 $amber-alpha: rgba(221, 157, 76, 0.2);
-$emerald: #c87a50
-
-
+$emerald: #c87a50;
+$butterscotch-strong: color.adjust($butterscotch, lightness -10%);
+$card-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+$card-shadow-lg: 0 18px 40px rgba(0, 0, 0, .12);
+$radius: .75rem;
+$radius-lg: 1rem;
