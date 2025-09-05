@@ -1,33 +1,39 @@
 @use './variables' as *;
+
+
 .header {
     background-color: $caf-noir;
     color: $papaya-whip;
     height: 80px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: fixed; 
+    inset: 0 0 auto 0;
     z-index: 1000;
+    box-shadow: 0 6px 24px rgba(0,0,0,.15);
 }
 
 .header__container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
     height: 100%;;
 }
 
+.header__right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .header__logo {
-    width: 150px;
-    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 2rem;
+    height: 100%;
     img {
-        width: 100%;
-        height: auto;
-        max-width: 112px;
+        height: 100%;
+        width: auto;
+        max-height: 79px;
         display: block;
     }
 }
@@ -62,11 +68,10 @@
 }
 
 .header__nav-link {
+    position: relative;
     color: $papaya-whip;
     text-decoration: none;
-    font-size: 1.125rem;
-    font-family: 'Montserrat', sans-serif;
-    
+    font-size: 1rem;
     &:hover {
         color: $butterscotch
     }
@@ -75,7 +80,7 @@
 
 .header__nav-link--active {
     color: $butterscotch;
-    font-weight: bold;
+    font-weight: 700;
 }
 
 
@@ -120,4 +125,45 @@
     .header__nav-close {
         display: none; // Hide the toggle button on larger screens
     }
+}
+
+// auth (sign in/out)
+
+.header__auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header__user {
+    font-size: .875rem;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: .85;
+}
+
+.header__btn {
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    padding: .55rem 1rem;
+    border-radius: 9999px;
+    background: $butterscotch;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+    transition: transform .15s ease;
+    box-shadow: .15s ease;
+    background-color: .15s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, .12);
+        background: $butterscotch-light;
+    }
+}
+
+.is-hidden {
+    display: none !important;
 }
