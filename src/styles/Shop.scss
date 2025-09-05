@@ -1,6 +1,5 @@
 @use "./_variables" as *;
 @use "./mixins.scss" as *;
-
 @use "sass:color";
 
 .shop {
@@ -17,137 +16,131 @@
     font-weight: 600;
     color: $caf-noir;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.25rem;
 
     @media (min-width: 768px) {
         font-size: 2.5rem;
     }
 }
 
-.shop__grid {
+.shop__layout {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 28px;
 
-    @media (min-width: 768px) {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    @media(min-width: 1024px) {
-        grid-template-columns: repeat(3, 1fr);
+    @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
     }
 }
 
-.shop__product-card {
-    background-color: #fff;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.2s;
-
-    &:hover {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.shop__panel {
+    width: 300px;
+    justify-self: end;
+    position: absolute;
+    top: 88px;
+    margin-right: -208px;
+    align-self: start;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 16px;
+    height: fit-content;
+    text-align: center;
+    @media (max-width: 1024px) {
+        position: static;
+        top: auto;
     }
 }
 
-.shop__product-image {
-    height: 250px;
-    overflow: hidden;
-}
-
-.shop__product-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.shop__product-info {
-    padding: 1rem;
-}
-
-.shop__product-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: $jet;
-    margin-bottom: 0.5rem;
-}
-
-.shop__product-price {
-    font-size: 1.1rem;
+.shop__panel-title {
+    text-align: center;
+    color: $caf-noir;
+    font-size: 1.125rem;
     font-weight: 700;
-    color: $butterscotch;
-    margin-bottom: 1rem;
+    margin: 0 0 10px;
 }
 
-.shop__product-link {
-    @include btn-text;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    text-decoration: none;
-    color: $jet;
-    border: 1px solid $butterscotch;
-    border-radius: 0.25rem;
-
-    &:hover {
-        color: $butterscotch;
-        background-color: color.adjust($alabaster, $lightness: 5%);
-    }
-}
-
-
-// style for menu
-
-.shop__menu-toggle {
-    @include btn-text;
-    display: block;
-    padding: 0.5rem 1rem;
-    background-color: $butterscotch;
-    color: #fff;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    margin-bottom: 1rem;
-    
-    &:hover {
-        background-color: color.adjust($butterscotch, $lightness: 10%);
-    }
-}
-
-.shop__nav {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-in-out;
-
-    &.shop__nav--open {
-        max-height: 300px;
-    }
+.shop__nav.shop__nav--static {
+    max-height: none;
+    overflow: visible;
+    transition: none;
 }
 
 .shop__nav-list {
     list-style: none;
     padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
 }
 
 .shop__nav-item {
-    margin-bottom: 0.5rem;
+    margin: 0;
 }
+
 
 .shop__nav-link {
-    display: block;
-    padding: 0.75rem 1rem;
-    color: $jet;
-    text-decoration: none;
-    background-color: $alabaster;
-    border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  color: $jet;
+  background: #fff;
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
 
-    &:hover {
-        background-color: $butterscotch;
-        color: #fff;
-    }
-
-    &.shop__nav-link--active {
-        background-color: $emerald;
-        color: #fff;
-    }
+  &:hover {
+    background: color.adjust(#fff, $lightness: -3%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0,0,0,.06);
+  }
 }
+
+
+// .shop__product-card {
+//     background-color: #fff;
+//     border-radius: 0.5rem;
+//     overflow: hidden;
+//     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+//     transition: box-shadow 0.2s;
+
+//     &:hover {
+//         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+//     }
+// }
+
+// .shop__product-image {
+//     height: 250px;
+//     overflow: hidden;
+// }
+
+// .shop__product-img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+// }
+
+// .shop__product-info {
+//     padding: 1rem;
+// }
+
+// .shop__product-title {
+//     font-size: 1.25rem;
+//     font-weight: 600;
+//     color: $jet;
+//     margin-bottom: 0.5rem;
+// }
+
+// .shop__product-price {
+//     font-size: 1.1rem;
+//     font-weight: 700;
+//     color: $butterscotch;
+//     margin-bottom: 1rem;
+// }
+
+
+
+
+
 
