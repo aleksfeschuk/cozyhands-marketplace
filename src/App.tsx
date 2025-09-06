@@ -45,8 +45,10 @@ const App: React.FC = () => {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/blog" element={<Blog />}></Route>
           <Route path="/blog/:slug" element={<BlogPost />}></Route>
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/confirmation" element={<Confirmation />} />
+          <Route path="/cart" element={<Cart />} >
+              <Route path="/cart/confirmation" element={<Confirmation />} />
+          </Route>
+          
           {/* Add more routes as needed */}
         </Routes>
       </div>

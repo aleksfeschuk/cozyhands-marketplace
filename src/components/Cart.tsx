@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import type { CartItem } from '../types/index';
 import { useCart } from '../context/CartContext';
 import Notification from './Notification';
+import { createOrder } from '../services/orders';
 
 
 
@@ -26,23 +27,56 @@ const Cart: React.FC = () => {
       setTotal(newTotal);
     }, [cartItems]);
 
-    const handleSubmitOrder = () => {
-      if (applicantName && applicantEmail) {
-        const orderDetails = {
-          cartItems,
-          applicantName,
-          applicantEmail,
+    const resetCheckout = () => {
+      setApplicantName("");
+      setApplicantEmail("");
+      setShowApplicantForm(false);
+      setNotificationMessage("");
+      setShowNotification(false);
+    }
+
+    const handleSubmitOrder = async () => {
+      const email = applicantEmail.trim().toLowerCase();
+      const name = applicantName.trim();
+      const emailOk = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
+      if (!name || !emailOk) {
+        setNotificationMessage("Please enter a valid name and email.");
+        setShowNotification(true);
+        return;
+      }
+
+      try {
+        const itemsToSave = cartItems.map(i => ({
+          id: i.id,
+          title: i.title,
+          price: i.price,
+          quantity: i.quantity,
+          imageUrl: i.imageUrl,
+        }));
+
+        const orderPayload = {
+          cartItems: itemsToSave,
+          applicantName: name,
+          applicantEmail: email,
           total,
-          date: new Date().toISOString(),
-        };
-        localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
-        navigate("/confirmation", { state: orderDetails });
+          source: "cart",
+        }
+
+
+        const orderId = await createOrder(orderPayload);
+
+        localStorage.setItem("orderDetails", JSON.stringify({ ...orderPayload, id: orderId }));
+
+        resetCheckout();
         setShowApplicantForm(false);
-        setNotificationMessage("Order placed!");
+        setNotificationMessage(`Order placed by ${name}` );
         setShowNotification(true);
-      } else {
-        setNotificationMessage("Please fill in all fields!")
+        navigate("confirmation", { state: { ...orderPayload, id: orderId } });
+      } catch (err) {
+        console.error("Create order error:", err);
+        setNotificationMessage("Oops, something went wrong. Please try again.");
         setShowNotification(true);
+        
       }
     }
 
