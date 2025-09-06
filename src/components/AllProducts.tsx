@@ -24,7 +24,7 @@ function applyFilterSort(sp: URLSearchParams, items: Product[]): Product[] {
     let list = [...items];
 
     const q = (sp.get("q") ?? "").trim().toLowerCase();
-    const cat = (sp.get("cat") ?? "");
+    const cat = (sp.get("cat") || "").trim();
     const min = parseFloat(sp.get("min") ?? "");
     const max = parseFloat(sp.get("max") ?? "");
     const sort = sp.get("sort") ?? "";

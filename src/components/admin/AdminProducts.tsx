@@ -190,6 +190,12 @@ const AdminProducts: React.FC = () => {
                 />
 
                 <select className="admin__select" value={cat} onChange={e => setCat(e.target.value)}>
+                    <option value="">All categories</option>
+                    <option value="Candles">Candles</option>
+                    <option value="Clothing">Clothing</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Bags">Bags</option>
+                    <option value="Sale">Sale</option>
                     {categories.map((c) => (
                         <option key={c} value={c}>{c}</option>
                     ))}
@@ -232,6 +238,12 @@ const AdminProducts: React.FC = () => {
                         onChange={(e) => setDraft({...draft, category: e.target.value})}
                     />
                     <datalist id="categories-datalist">
+                        <option value="">All categories</option>
+                        <option value="Candles">Candles</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Bags">Bags</option>
+                        <option value="Sale">Sale</option>
                         {Array.from(new Set(items.map((p) => p.category).filter(Boolean)))
                             .sort()
                             .map((c) => (

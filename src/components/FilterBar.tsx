@@ -8,6 +8,11 @@ type Props = { categories: string[] };
 export default function FiltersBar({ categories}: Props) {
     const [sp, setSp] = useSearchParams();
 
+    const uniqueCats = useMemo(
+        () => Array.from(new Set(categories.filter(Boolean))),
+        [categories]
+    );
+
     const values = useMemo(() => ({
         q: sp.get("q") ?? "",
         cat: sp.get("cat") ?? "",
@@ -33,8 +38,9 @@ export default function FiltersBar({ categories}: Props) {
 
     const set = (key: string, val: string) => {
         const next = new URLSearchParams(sp);
-        if (val.trim() !== "") {
-            next.set(key, val);
+        const clean = val.trim();
+        if (clean !== "") {
+            next.set(key, clean);
         } else {
             next.delete(key);
         }
@@ -57,9 +63,15 @@ export default function FiltersBar({ categories}: Props) {
                 onChange={(e) => set("cat", e.target.value)}
             >
                 <option value="">All categories</option>
-                {categories.map((c) => (
+                <option value="Candles">Candles</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Bags">Bags</option>
+                <option value="Sale">Sale</option>
+                {uniqueCats.map((c) => (
                     <option key={c} value={c}>{c}</option>
                 ))}
+
             </select>
 
             <input 

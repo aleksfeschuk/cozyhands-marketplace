@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { mockProducts } from "../data/products";
+import { subscribeEmail } from "../services/newsletter";
+
 
 const categories = [
     { name: "Clothing", path: "/shop/clothing" },
@@ -40,14 +42,23 @@ const reviews = [
 
     //newsletter
 
-const handleNewsLetterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+const handleNewsLetterSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
     const data = new FormData(form);
-    const email = data.get("email");
+    const email = (data.get("email") as string)?.trim();
 
-    console.log("NewsLetter email:", email);
-    form.reset();
+    if (!email) return;
+
+    try {
+        await subscribeEmail(email, "home__newsletter")
+        alert("Thanks! You're subsribed");
+        form.reset();
+    } catch(err) {
+        console.error("Newsletter subscribe error:", err);
+        alert("Oops, something went wrong. Please try again.");
+    }
+    
 }
 
 // Home component for the main page
@@ -213,7 +224,7 @@ const Home: React.FC = () => {
                             </form>
                             <p className="home__newsletter-hint">We respect your privacy - no spam</p>
                         </div>
-                    </section>
+                </section>
             </div>
         </section>
     );
